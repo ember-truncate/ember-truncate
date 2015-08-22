@@ -1,0 +1,21 @@
+.truncate-multiline--button,
+.truncate-multiline--button-hidden {
+  display: block !important;
+  flex-shrink: 0 !important;
+}
+
+.truncate-multiline--button-hidden {
+  display: none !important;
+}
+
+.truncate-multiline--last-line {
+  display: block !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  width: 100% !important;
+}
+
+.truncate-multiline--last-line-wrapper {
+  display: flex !important;
+}

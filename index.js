@@ -2,5 +2,8 @@
 'use strict';
 
 module.exports = {
-  name: 'ember-truncate'
+  name: 'ember-truncate',
+  included: function(app) {
+    app.import('vendor/styles/truncate-multiline.css');
+  }
 };
