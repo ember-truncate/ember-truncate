@@ -36,7 +36,6 @@
     "ember-disable-prototype-extensions": "^1.0.0",
     "ember-disable-proxy-controllers": "^1.0.0",
     "ember-export-application-global": "^1.0.3",
-    "ember-singularity-mixins": "^1.2.0",
     "ember-try": "0.0.6"
   },
   "keywords": [
@@ -49,7 +48,8 @@
   ],
   "dependencies": {
     "ember-cli-babel": "^5.1.3",
-    "ember-cli-htmlbars": "0.7.9"
+    "ember-cli-htmlbars": "0.7.9",
+    "ember-singularity-mixins": "^1.2.0"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"
