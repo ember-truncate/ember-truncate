@@ -1,5 +1,7 @@
 # Ember Truncate
 
+[![Build Status](https://travis-ci.org/nickiaconis/ember-truncate.svg?branch=master)](https://travis-ci.org/nickiaconis/ember-truncate)
+
 This addon provides a component for truncating blocks of text.
 
 ## Installation
