@@ -1,13 +1,7 @@
+/* global CustomEvent */
+
 import { moduleForComponent, test } from 'ember-qunit';
-// import { skip } from 'qunit';
 import hbs from 'htmlbars-inline-precompile';
-
-// Skip these tests in browser because they are only consistent in phantom
-const testFunc = (isPhantomJS() ? test : test); // skip);
-
-function isPhantomJS() {
-  return window.navigator.userAgent.indexOf('PhantomJS') > -1;
-}
 
 moduleForComponent('truncate-multiline', 'Integration | Component | truncate-multiline', {
   beforeEach() {
@@ -21,7 +15,7 @@ moduleForComponent('truncate-multiline', 'Integration | Component | truncate-mul
   integration: true
 });
 
-testFunc('inline form works', function(assert) {
+ test('inline form works', function(assert) {
   // Set any properties with this.set('myProperty', 'value');
   // Handle any actions with this.on('myAction', function(val) { ... });
 
@@ -34,7 +28,7 @@ testFunc('inline form works', function(assert) {
   assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious </span><span>supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span class="truncate-multiline--last-line">supercalifragilisticexpialidocious supercalifragilisticexpialidocious</span><button class="truncate-multiline--button">see more</button></span></div></div></div>');
 });
 
-testFunc('block form works', function(assert) {
+ test('block form works', function(assert) {
   // Set any properties with this.set('myProperty', 'value');
   // Handle any actions with this.on('myAction', function(val) { ... });
 
@@ -54,7 +48,7 @@ testFunc('block form works', function(assert) {
   assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious </span><span>supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span class="truncate-multiline--last-line">supercalifragilisticexpialidocious supercalifragilisticexpialidocious </span><button class="truncate-multiline--button">see more</button></span></div></div></div>');
 });
 
-testFunc('block form with nested elements works', function(assert) {
+ test('block form with nested elements works', function(assert) {
   // Template block usage:
   this.render(hbs`
     <div style="width: 362px; font: 16px sans-serif;">
@@ -71,7 +65,7 @@ testFunc('block form with nested elements works', function(assert) {
   assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span><b><i>supercalifragilisticexpialidocious </i></b></span><span><b><i>supercalifragilisticexpialidocious</i></b> <i>a <b>e</b> i</i> </span><span class="truncate-multiline--last-line-wrapper"><span class="truncate-multiline--last-line">supercalifragilisticexpialidocious supercalifragilisticexpialidocious </span><button class="truncate-multiline--button">see more</button></span></div></div></div>');
 });
 
-testFunc('specifying a different number of lines works', function(assert) {
+ test('specifying a different number of lines works', function(assert) {
   // Template block usage:
   this.render(hbs`
     <div style="width: 362px; font: 16px sans-serif;">
@@ -86,7 +80,7 @@ testFunc('specifying a different number of lines works', function(assert) {
   assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span class="truncate-multiline--last-line">supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious</span><button class="truncate-multiline--button">see more</button></span></div></div></div>');
 });
 
-testFunc('specifying different button text works', function(assert) {
+ test('specifying different button text works', function(assert) {
   // Set any properties with this.set('myProperty', 'value');
   // Handle any actions with this.on('myAction', function(val) { ... });
 
@@ -104,7 +98,7 @@ testFunc('specifying different button text works', function(assert) {
   assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious </span><span>supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span class="truncate-multiline--last-line">supercalifragilisticexpialidocious supercalifragilisticexpialidocious</span><button class="truncate-multiline--button">click me</button></span></div></div></div>');
 });
 
-testFunc('the button is hidden if the text isn\'t long enough to truncate', function(assert) {
+ test('the button is hidden if the text isn\'t long enough to truncate', function(assert) {
   // Template block usage:
   this.render(hbs`
     <div style="width: 362px; font: 16px sans-serif;">
@@ -119,7 +113,7 @@ testFunc('the button is hidden if the text isn\'t long enough to truncate', func
   assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span>supercalifragilisticexpialidocious</span><button class="truncate-multiline--button-hidden"><!----></button></span></div></div></div>');
 });
 
-testFunc('clicking the button shows full text', function(assert) {
+ test('clicking the button shows full text', function(assert) {
   assert.expect(2);
 
   // Template block usage:
@@ -143,7 +137,7 @@ testFunc('clicking the button shows full text', function(assert) {
   assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view">supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious</div></div>', 'not truncated after clicking button');
 });
 
-testFunc('passing showButton=false hides the button', function(assert) {
+ test('passing showButton=false hides the button', function(assert) {
   // Template block usage:
   this.render(hbs`
     <div style="width: 362px; font: 16px sans-serif;">
@@ -158,7 +152,7 @@ testFunc('passing showButton=false hides the button', function(assert) {
   assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious </span><span>supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span class="truncate-multiline--last-line">supercalifragilisticexpialidocious supercalifragilisticexpialidocious</span><button class="truncate-multiline--button-hidden"><!----></button></span></div></div></div>');
 });
 
-testFunc('truncation can be controlled externally via the truncate attribute', function(assert) {
+ test('truncation can be controlled externally via the truncate attribute', function(assert) {
   assert.expect(2);
 
   // don't truncate
@@ -187,7 +181,7 @@ testFunc('truncation can be controlled externally via the truncate attribute', f
   assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious </span><span>supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span class="truncate-multiline--last-line">supercalifragilisticexpialidocious supercalifragilisticexpialidocious</span><button class="truncate-multiline--button">see more</button></span></div></div></div>', 'truncation when myTruncate=true');
 });
 
-testFunc('resizing triggers truncation recompute', function(assert) {
+ test('resizing triggers truncation recompute', function(assert) {
   assert.expect(3);
 
   // Template block usage:
@@ -208,9 +202,7 @@ testFunc('resizing triggers truncation recompute', function(assert) {
   // change container sizing
   this.$('#truncate-multiline--test-container')[0].style.width = '540px';
   // trigger resize event
-  let resizeEvent = document.createEvent('HTMLEvents');
-  resizeEvent.initEvent('resize', true, true);
-  window.dispatchEvent(resizeEvent);
+  window.dispatchEvent(new CustomEvent('resize'));
   // remove attributes we have no control over
   this.$('[id^=ember]').removeAttr('id');
   this.$('[data-ember-action]').removeAttr('data-ember-action');
