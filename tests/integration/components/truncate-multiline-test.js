@@ -35,9 +35,9 @@ moduleForComponent('truncate-multiline', 'Integration | Component | truncate-mul
   // Template block usage:
   this.render(hbs`
     <div style="width: 362px; font: 16px sans-serif;">
-      {{#truncate-multiline}}
+      {{#truncate-multiline~}}
         supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious
-      {{/truncate-multiline}}
+      {{~/truncate-multiline}}
     </div>
   `);
 
@@ -45,16 +45,16 @@ moduleForComponent('truncate-multiline', 'Integration | Component | truncate-mul
   this.$('[id^=ember]').removeAttr('id');
   this.$('[data-ember-action]').removeAttr('data-ember-action');
 
-  assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious </span><span>supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span class="truncate-multiline--last-line">supercalifragilisticexpialidocious supercalifragilisticexpialidocious </span><button class="truncate-multiline--button">see more</button></span></div></div></div>');
+  assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious </span><span>supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span class="truncate-multiline--last-line">supercalifragilisticexpialidocious supercalifragilisticexpialidocious</span><button class="truncate-multiline--button">see more</button></span></div></div></div>');
 });
 
  test('block form with nested elements works', function(assert) {
   // Template block usage:
   this.render(hbs`
     <div style="width: 362px; font: 16px sans-serif;">
-      {{#truncate-multiline}}
+      {{#truncate-multiline~}}
         <b><i>supercalifragilisticexpialidocious supercalifragilisticexpialidocious</i></b> <i>a <b>e</b> i</i> supercalifragilisticexpialidocious supercalifragilisticexpialidocious
-      {{/truncate-multiline}}
+      {{~/truncate-multiline}}
     </div>
   `);
 
@@ -62,7 +62,7 @@ moduleForComponent('truncate-multiline', 'Integration | Component | truncate-mul
   this.$('[id^=ember]').removeAttr('id');
   this.$('[data-ember-action]').removeAttr('data-ember-action');
 
-  assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span><b><i>supercalifragilisticexpialidocious </i></b></span><span><b><i>supercalifragilisticexpialidocious</i></b> <i>a <b>e</b> i</i> </span><span class="truncate-multiline--last-line-wrapper"><span class="truncate-multiline--last-line">supercalifragilisticexpialidocious supercalifragilisticexpialidocious </span><button class="truncate-multiline--button">see more</button></span></div></div></div>');
+  assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span><b><i>supercalifragilisticexpialidocious </i></b></span><span><b><i>supercalifragilisticexpialidocious</i></b> <i>a <b>e</b> i</i> </span><span class="truncate-multiline--last-line-wrapper"><span class="truncate-multiline--last-line">supercalifragilisticexpialidocious supercalifragilisticexpialidocious</span><button class="truncate-multiline--button">see more</button></span></div></div></div>');
 });
 
  test('specifying a different number of lines works', function(assert) {

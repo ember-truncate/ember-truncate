@@ -20,10 +20,12 @@ To get started, place the `truncate-multiline` component in one of your template
 You can also use the block form instead of supplying the `text` attribute. The block form supports nested DOM nodes.
 
 ```handlebars
-{{#truncate-multiline}}
+{{#truncate-multiline~}}
   Long text to truncate with <em><strong>really</strong> important</em> formatting.
-{{/truncate-multiline}}
+{{~/truncate-multiline}}
 ```
+
+It is recommended that you use the [tilde `~` character to omit extra whitespace](http://handlebarsjs.com/expressions.html#whitespace-control) when using the block form.
 
 The number of lines at which the component truncates can be changed by setting the `lines` attribute. The default is 3 lines.
 

@@ -1,9 +1,9 @@
 {{#if truncate}}
   <div class="truncate-multiline--truncation-target">
     {{~#if hasBlock~}}
-      {{~yield~}}
+      {{yield}}
     {{~else~}}
-      {{~text~}}
+      {{text}}
     {{~/if~}}
   </div>
   <button class="truncate-multiline--button{{if _shouldShowButton "" "-hidden"}}" {{action "showMore"}}>
