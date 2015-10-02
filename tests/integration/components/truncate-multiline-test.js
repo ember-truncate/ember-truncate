@@ -210,3 +210,18 @@ moduleForComponent('truncate-multiline', 'Integration | Component | truncate-mul
   assert.equal(this.$('#truncate-multiline--test-container')[0].style.width, '540px', 'the container was resized');
   assert.equal(this.$('#truncate-multiline--test-container').html().replace(/\n|  +/g, ''), '<div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span>supercalifragilisticexpialidocious supercalifragilisticexpialidocious</span><button class="truncate-multiline--button-hidden"></button></span></div></div>', 'truncation after resizing');
 });
+
+test('adds centering class if the text is meant to be centered', function(assert) {
+  // Template block usage:
+  this.render(hbs`
+    <div style="width: 362px; font: 16px sans-serif; text-align: center;">
+      {{truncate-multiline showButton=false text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
+    </div>
+  `);
+
+  // remove attributes we have no control over
+  this.$('[id^=ember]').removeAttr('id');
+  this.$('[data-ember-action]').removeAttr('data-ember-action');
+
+  assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif; text-align: center;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious </span><span>supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper truncate-multiline--center-align"><span class="truncate-multiline--last-line">supercalifragilisticexpialidocious supercalifragilisticexpialidocious</span><button class="truncate-multiline--button-hidden"><!----></button></span></div></div></div>');
+});

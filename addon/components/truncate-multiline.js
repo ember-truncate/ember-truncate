@@ -89,6 +89,16 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
    */
   _didTruncate: false,
 
+   /**
+   * Whether or not the text is meant to be centered.
+   * @type {Boolean}
+   * @private
+   */
+  _isCenterAligned: Ember.computed(function() {
+    let styles = window.getComputedStyle(this.element, null);
+    return styles.textAlign === 'center';
+  }),
+
   /**
    * Kicks off the truncation after render.
    * @return {Void}
@@ -115,6 +125,9 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
         el.removeChild(ellipsizedSpan);
         let wrappingSpan = document.createElement('span');
         wrappingSpan.classList.add(`${cssNamespace}--last-line-wrapper`);
+        if (this.get('_isCenterAligned')) {
+          wrappingSpan.classList.add(`${cssNamespace}--center-align`);
+        }
         wrappingSpan.appendChild(ellipsizedSpan);
         wrappingSpan.appendChild(button);
         el.appendChild(wrappingSpan);

@@ -19,3 +19,7 @@
 .truncate-multiline--last-line-wrapper {
   display: flex !important;
 }
+
+.truncate-multiline--center-align {
+  justify-content: center;
+}
