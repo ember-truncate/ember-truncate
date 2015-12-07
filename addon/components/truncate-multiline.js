@@ -112,10 +112,12 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
         button.parentNode.removeChild(button);
         clamp(el, this.get('lines'), (didTruncate) => this.set('_isTruncated', didTruncate), `${cssNamespace}--last-line`);
         let ellipsizedSpan = el.lastChild;
-        el.removeChild(ellipsizedSpan);
         let wrappingSpan = document.createElement('span');
         wrappingSpan.classList.add(`${cssNamespace}--last-line-wrapper`);
-        wrappingSpan.appendChild(ellipsizedSpan);
+        if (ellipsizedSpan) {
+          el.removeChild(ellipsizedSpan);
+          wrappingSpan.appendChild(ellipsizedSpan);
+        }
         wrappingSpan.appendChild(button);
         el.appendChild(wrappingSpan);
         this.set('_didTruncate', true);
@@ -159,4 +161,3 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
     }
   }
 });
-
