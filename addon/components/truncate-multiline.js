@@ -66,21 +66,41 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
    * An override that can be used to hide the "see more" button.
    * @type {Boolean}
    */
-  showButton: true,
+  showSeeMoreButton: true,
+
+  /**
+   * An override that can be used to hide the "see less" button.
+   * @type {Boolean}
+   */
+  showSeeLessButton: true,
 
   /**
    * The text to display in the "see more" button.
    * @type {String}
    */
-  buttonText: 'see more',
+  seeMoreButtonText: 'see more',
+
+  /**
+   * The text to display in the "see less" button.
+   * @type {String}
+   */
+  seeLessButtonText: 'see less',
 
   /**
    * Whether or not the "see more" button should be visible.
-   * @property _shouldShowButton
+   * @property _shouldShowSeeMoreButton
    * @type {Boolean}
    * @private
    */
-  _shouldShowButton: Ember.computed.and('showButton', 'isTruncated'),
+  _shouldShowSeeMoreButton: Ember.computed.and('showSeeMoreButton', 'isTruncated'),
+
+  /**
+   * Whether or not the "see less" button should be visible.
+   * @property _shouldShowSeeLessButton
+   * @type {Boolean}
+   * @private
+   */
+  _shouldShowSeeLessButton: Ember.computed.and('showSeeLessButton', 'isTruncated'),
 
   /**
    * Keeps track of whether or not _doTruncate has been run.
@@ -148,15 +168,45 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
 
   actions: {
     /**
-     * Called by the "see more" button. Turns off truncation.
+     * Called by the "see more/see less" button. Toggles truncation.
      * @return {Void}
      */
-    showMore() {
-      this.set('truncate', false);
-      if (this.get('onExpand')) {
-        this.sendAction('onExpand');
+    toggleTruncate() {
+      let wasTruncated = this.get('truncate');
+      this.toggleProperty('truncate');
+
+      if (wasTruncated) {
+        let onExpand = this.attrs.onExpand;
+
+        if (onExpand) {
+          if (typeof onExpand === 'function') {
+            onExpand();
+          } else {
+            this.sendAction('onExpand');
+          }
+        }
+      } else {
+        this._doTruncation();
+        let onCollapse = this.attrs.onCollapse;
+
+        if (onCollapse) {
+          if (typeof onCollapse === 'function') {
+            onCollapse();
+          } else {
+            this.sendAction('onCollapse');
+          }
+        }
+      }
+
+      let onToggleTruncate = this.attrs.onToggleTruncate;
+
+      if (onToggleTruncate) {
+        if (typeof onToggleTruncate === 'function') {
+          onToggleTruncate();
+        } else {
+          this.sendAction('onToggleTruncate');
+        }
       }
     }
   }
 });
-
