@@ -38,7 +38,7 @@ Other attributes are available for advanced use. See the documentation in the so
 ```handlebars
 {{truncate-multiline text="Long text to truncate." truncate=booleanInParent showButton=false}}
 
-{{truncate-multiline text="Long text to truncate." buttonText="Show More" onExpand=(action "doSomeCoolThing")}}
+{{truncate-multiline text="Long text to truncate." seeMoreButtonText="Show More" onExpand=(action "doSomeCoolThing")}}
 ```
 
 ## Contributing
