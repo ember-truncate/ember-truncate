@@ -141,38 +141,6 @@ test('clicking the button shows/hides full text', function(assert) {
   assert.equal(this$.html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious </span><span>supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span class="truncate-multiline--last-line">supercalifragilisticexpialidocious supercalifragilisticexpialidocious</span><button class="truncate-multiline--button">see more</button></span></div></div></div>', 'truncated before clicking button');
 });
 
-test('passing showSeeMoreButton=false hides the "see more" button', function(assert) {
-  // Template block usage:
-  this.render(hbs`
-    <div style="width: 362px; font: 16px sans-serif;">
-      {{truncate-multiline showSeeMoreButton=false text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
-    </div>
-  `);
-
-  // remove attributes we have no control over
-  this.$('[id^=ember]').removeAttr('id');
-  this.$('[data-ember-action]').removeAttr('data-ember-action');
-
-  assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious </span><span>supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span class="truncate-multiline--last-line">supercalifragilisticexpialidocious supercalifragilisticexpialidocious</span><button class="truncate-multiline--button-hidden">see more</button></span></div></div></div>');
-});
-
-test('passing showSeeLessButton=false hides the "see less" button', function(assert) {
-  // Template block usage:
-  this.render(hbs`
-    <div style="width: 362px; font: 16px sans-serif;">
-      {{truncate-multiline showSeeLessButton=false text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
-    </div>
-  `);
-
-  this.$('button').click();
-
-  // remove attributes we have no control over
-  this.$('[id^=ember]').removeAttr('id');
-  this.$('[data-ember-action]').removeAttr('data-ember-action');
-
-  assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view">supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious<button class="truncate-multiline--button-hidden">see less</button></div></div>', 'not truncated after clicking button');
-});
-
 test('truncation can be controlled externally via the truncate attribute', function(assert) {
   assert.expect(2);
 
@@ -201,6 +169,64 @@ test('truncation can be controlled externally via the truncate attribute', funct
   this.$('[data-ember-action]').removeAttr('data-ember-action');
 
   assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious </span><span>supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span class="truncate-multiline--last-line">supercalifragilisticexpialidocious supercalifragilisticexpialidocious</span><button class="truncate-multiline--button">see more</button></span></div></div></div>', 'truncation when myTruncate=true');
+});
+
+test('passing showSeeMoreButton=false hides the "see more" button', function(assert) {
+  // Template block usage:
+  this.render(hbs`
+    <div style="width: 362px; font: 16px sans-serif;">
+      {{truncate-multiline showSeeMoreButton=false text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
+    </div>
+  `);
+
+  // remove attributes we have no control over
+  this.$('[id^=ember]').removeAttr('id');
+  this.$('[data-ember-action]').removeAttr('data-ember-action');
+
+  assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious </span><span>supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span class="truncate-multiline--last-line">supercalifragilisticexpialidocious supercalifragilisticexpialidocious</span><button class="truncate-multiline--button-hidden">see more</button></span></div></div></div>', 'see more button is hidden');
+});
+
+test('passing showSeeLessButton=false hides the "see less" button', function(assert) {
+  // Template block usage:
+  this.render(hbs`
+    <div style="width: 362px; font: 16px sans-serif;">
+      {{truncate-multiline showSeeLessButton=false text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
+    </div>
+  `);
+
+  this.$('button').click();
+
+  // remove attributes we have no control over
+  this.$('[id^=ember]').removeAttr('id');
+  this.$('[data-ember-action]').removeAttr('data-ember-action');
+
+  assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view">supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious<button class="truncate-multiline--button-hidden">see less</button></div></div>', 'see less butotn is hidden');
+});
+
+test('passing showButton=false hides both buttons', function(assert) {
+  this.set('myTruncate', true);
+
+  // Template block usage:
+  this.render(hbs`
+    <div style="width: 362px; font: 16px sans-serif;">
+      {{truncate-multiline truncate=myTruncate showButton=false text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
+    </div>
+  `);
+
+  let this$ = this.$().clone();
+  // remove attributes we have no control over
+  this$.find('[id^=ember]').removeAttr('id');
+  this$.find('[data-ember-action]').removeAttr('data-ember-action');
+
+  assert.equal(this$.html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious </span><span>supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span class="truncate-multiline--last-line">supercalifragilisticexpialidocious supercalifragilisticexpialidocious</span><button class="truncate-multiline--button-hidden">see more</button></span></div></div></div>', 'see more button is hidden');
+
+  this.set('myTruncate', false);
+
+  // remove attributes we have no control over
+  this.$('[id^=ember]').removeAttr('id');
+  this.$('[data-ember-action]').removeAttr('data-ember-action');
+
+  assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view">supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious<button class="truncate-multiline--button-hidden">see less</button></div></div>', 'see less button is hidden');
 });
 
 test('resizing triggers truncation recompute', function(assert) {

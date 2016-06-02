@@ -63,6 +63,12 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
   _isTruncated: false,
 
   /**
+   * An override that can be used to hide both buttons.
+   * @type {Boolean}
+   */
+  showButton: true,
+
+  /**
    * An override that can be used to hide the "see more" button.
    * @type {Boolean}
    */
@@ -92,7 +98,7 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
    * @type {Boolean}
    * @private
    */
-  _shouldShowSeeMoreButton: Ember.computed.and('showSeeMoreButton', 'isTruncated'),
+  _shouldShowSeeMoreButton: Ember.computed.and('showButton', 'showSeeMoreButton', 'isTruncated'),
 
   /**
    * Whether or not the "see less" button should be visible.
@@ -100,7 +106,7 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
    * @type {Boolean}
    * @private
    */
-  _shouldShowSeeLessButton: Ember.computed.and('showSeeLessButton', 'isTruncated'),
+  _shouldShowSeeLessButton: Ember.computed.and('showButton', 'showSeeLessButton', 'isTruncated'),
 
   /**
    * Keeps track of whether or not _doTruncate has been run.
