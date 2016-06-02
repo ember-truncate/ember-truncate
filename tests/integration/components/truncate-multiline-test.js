@@ -260,11 +260,13 @@ test('resizing triggers truncation recompute', function(assert) {
 });
 
 test('clicking the see more/less button fires user defined actions', function(assert) {
-  assert.expect(4);
+  assert.expect(3);
+
+  let args = [];
 
   this.on('assertOnExpand', () => assert.ok(true, 'onExpand action triggered'));
   this.on('assertOnCollapse', () => assert.ok(true, 'onCollapse action triggered'));
-  this.on('assertOnToggleTruncate', () => assert.ok(true, 'onToggleTruncate action triggered')); // Runs twice since it fires on every button click
+  this.on('pushOnToggleTruncate', (isTruncated) => args.push(isTruncated));
 
   // Template block usage:
   this.render(hbs`
@@ -272,16 +274,18 @@ test('clicking the see more/less button fires user defined actions', function(as
       {{truncate-multiline
         onExpand=(action "assertOnExpand")
         onCollapse=(action "assertOnCollapse")
-        onToggleTruncate=(action "assertOnToggleTruncate")
+        onToggleTruncate=(action "pushOnToggleTruncate")
         text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
     </div>
   `);
 
   return wait().then(() => {
     this.$('button').click();
-
     return wait();
   }).then(() => {
     this.$('button').click();
+    return wait();
+  }).then(() => {
+    assert.deepEqual(args, [false, true], 'onToggleTruncate action triggered (twice) with the expected arguments');
   });
 });

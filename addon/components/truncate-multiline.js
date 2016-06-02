@@ -208,9 +208,9 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
 
       if (onToggleTruncate) {
         if (typeof onToggleTruncate === 'function') {
-          onToggleTruncate();
+          onToggleTruncate(!wasTruncated);
         } else {
-          this.sendAction('onToggleTruncate');
+          this.sendAction('onToggleTruncate', !wasTruncated);
         }
       }
     }
