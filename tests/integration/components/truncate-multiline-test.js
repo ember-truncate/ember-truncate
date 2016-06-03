@@ -110,7 +110,7 @@ test('the button is hidden if the text isn\'t long enough to truncate', function
   this.$('[id^=ember]').removeAttr('id');
   this.$('[data-ember-action]').removeAttr('data-ember-action');
 
-  assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span>supercalifragilisticexpialidocious</span><button class="truncate-multiline--button-hidden">see more</button></span></div></div></div>');
+  assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span>supercalifragilisticexpialidocious</span><button class="truncate-multiline--button-hidden"><!----></button></span></div></div></div>');
 });
 
 test('clicking the button shows/hides full text', function(assert) {
@@ -159,7 +159,7 @@ test('truncation can be controlled externally via the truncate attribute', funct
   this$.find('[id^=ember]').removeAttr('id');
   this$.find('[data-ember-action]').removeAttr('data-ember-action');
 
-  assert.equal(this$.html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view">supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious<button class="truncate-multiline--button-hidden">see less</button></div></div>', 'no truncation when myTruncate=false');
+  assert.equal(this$.html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view">supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious<button class="truncate-multiline--button-hidden"><!----></button></div></div>', 'no truncation when myTruncate=false');
 
   // do truncate
   this.set('myTruncate', true);
@@ -183,7 +183,7 @@ test('passing showSeeMoreButton=false hides the "see more" button', function(ass
   this.$('[id^=ember]').removeAttr('id');
   this.$('[data-ember-action]').removeAttr('data-ember-action');
 
-  assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious </span><span>supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span class="truncate-multiline--last-line">supercalifragilisticexpialidocious supercalifragilisticexpialidocious</span><button class="truncate-multiline--button-hidden">see more</button></span></div></div></div>', 'see more button is hidden');
+  assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious </span><span>supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span class="truncate-multiline--last-line">supercalifragilisticexpialidocious supercalifragilisticexpialidocious</span><button class="truncate-multiline--button-hidden"><!----></button></span></div></div></div>', 'see more button is hidden');
 });
 
 test('passing showSeeLessButton=false hides the "see less" button', function(assert) {
@@ -200,7 +200,7 @@ test('passing showSeeLessButton=false hides the "see less" button', function(ass
   this.$('[id^=ember]').removeAttr('id');
   this.$('[data-ember-action]').removeAttr('data-ember-action');
 
-  assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view">supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious<button class="truncate-multiline--button-hidden">see less</button></div></div>', 'see less butotn is hidden');
+  assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view">supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious<button class="truncate-multiline--button-hidden"><!----></button></div></div>', 'see less butotn is hidden');
 });
 
 test('passing showButton=false hides both buttons', function(assert) {
@@ -218,7 +218,7 @@ test('passing showButton=false hides both buttons', function(assert) {
   this$.find('[id^=ember]').removeAttr('id');
   this$.find('[data-ember-action]').removeAttr('data-ember-action');
 
-  assert.equal(this$.html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious </span><span>supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span class="truncate-multiline--last-line">supercalifragilisticexpialidocious supercalifragilisticexpialidocious</span><button class="truncate-multiline--button-hidden">see more</button></span></div></div></div>', 'see more button is hidden');
+  assert.equal(this$.html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious </span><span>supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span class="truncate-multiline--last-line">supercalifragilisticexpialidocious supercalifragilisticexpialidocious</span><button class="truncate-multiline--button-hidden"><!----></button></span></div></div></div>', 'see more button is hidden');
 
   this.set('myTruncate', false);
 
@@ -226,7 +226,7 @@ test('passing showButton=false hides both buttons', function(assert) {
   this.$('[id^=ember]').removeAttr('id');
   this.$('[data-ember-action]').removeAttr('data-ember-action');
 
-  assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view">supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious<button class="truncate-multiline--button-hidden">see less</button></div></div>', 'see less button is hidden');
+  assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view">supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious<button class="truncate-multiline--button-hidden"><!----></button></div></div>', 'see less button is hidden');
 });
 
 test('resizing triggers truncation recompute', function(assert) {
@@ -256,7 +256,7 @@ test('resizing triggers truncation recompute', function(assert) {
   this.$('[data-ember-action]').removeAttr('data-ember-action');
 
   assert.equal(this.$('#truncate-multiline--test-container')[0].style.width, '540px', 'the container was resized');
-  assert.equal(this.$('#truncate-multiline--test-container').html().replace(/\n|  +/g, ''), '<div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span>supercalifragilisticexpialidocious supercalifragilisticexpialidocious</span><button class="truncate-multiline--button-hidden">see more</button></span></div></div>', 'truncation after resizing');
+  assert.equal(this.$('#truncate-multiline--test-container').html().replace(/\n|  +/g, ''), '<div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span>supercalifragilisticexpialidocious supercalifragilisticexpialidocious</span><button class="truncate-multiline--button-hidden"></button></span></div></div>', 'truncation after resizing');
 });
 
 test('clicking the see more/less button fires user defined actions', function(assert) {

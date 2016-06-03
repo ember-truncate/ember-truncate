@@ -7,7 +7,7 @@
     {{~/if~}}
   </div>
   <button class="truncate-multiline--button{{if _shouldShowSeeMoreButton "" "-hidden"}}" {{action "toggleTruncate"}}>
-    {{seeMoreButtonText}}
+    {{if _shouldShowSeeMoreButton seeMoreButtonText ""}}
   </button>
 {{else}}
   {{#if hasBlock}}
@@ -16,6 +16,6 @@
     {{text}}
   {{/if}}
   <button class="truncate-multiline--button{{if _shouldShowSeeLessButton "" "-hidden"}}" {{action "toggleTruncate"}}>
-    {{seeLessButtonText}}
+    {{if _shouldShowSeeLessButton seeLessButtonText ""}}
   </button>
 {{/if}}
