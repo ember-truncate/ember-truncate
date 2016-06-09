@@ -10,51 +10,71 @@
  * @param {String} cssClass - A CSS class applied to the last line instead of inline CSS.
  */
 
-export default (function(win, doc) {
-  var measure, text, lineWidth, pos,
-    lineStart, lineCount, wordStart,
-    line, lineText, wasNewLine,
-    nodeStack, seedQueue, pendingQueue,
-    textNode, measureWidth, thisNode, nextQueue,
-    ce = doc.createElement.bind(doc),
-    ctn = doc.createTextNode.bind(doc);
-
-  // measurement element is made a child of the clamped element to get it's style
-  measure = ce('span');
-
-  (function(s) {
-    s.position = 'absolute'; // prevent page reflow
-    s.whiteSpace = 'pre'; // cross-browser width results
-    s.visibility = 'hidden'; // prevent drawing
-  }(measure.style));
-
-  function appendNodeAndQueueToElement(element, node, queue) {
-    var queueLength = queue && queue.length,
-        i, aNode, bNode;
-    // add nodes waiting to be finalized
-    for(i = 0; i < queueLength; ++i) {
-      element.appendChild(queue[i]);
+let measure,
+    text,
+    lineWidth,
+    pos,
+    lineStart,
+    lineCount,
+    wordStart,
+    line,
+    lineText,
+    wasNewLine,
+    nodeStack,
+    seedQueue,
+    pendingQueue,
+    textNode,
+    measureWidth,
+    thisNode,
+    nextQueue,
+    ce,
+    ctn;
+    
+    if (window, document) {
+      window = document;
+      window = document;
+      doc = document;
+      
+      ce = doc.createElement.bind(doc);
+      ctn = doc.createTextNode.bind(doc);
+      // measurement element is made a child of the clamped element to get it's style
+      measure = ce('span');
+      
+      measure.style.position = 'absolute';  // prevent page reflow
+      measure.whiteSpace = 'pre'; // cross-browser width results
+      measure.visibility = 'hidden'; // prevent drawing
     }
-    if (nodeStack.length) {
-      // add nodes from the stack
-      i = nodeStack.length - 1;
-      // add the text to the last node on the stack
-      nodeStack[i].appendChild(node);
-      // ensure nodes from the stack are appended to each other
-      for (; i > 0 && (aNode = nodeStack[i]).parentNode !== (bNode = nodeStack[i - 1]); --i) {
-        bNode.appendChild(aNode);
-      }
-      // ensure root node from stack is added to measurement node
-      if ((aNode = nodeStack[0]).parentNode !== element) {
-        element.appendChild(aNode);
-      }
-    } else {
-      // add the text directly to the measurement node
-      element.appendChild(node);
-    }
-  } // function appendNodeAndQueueToElement
 
-  return function clamp(el, lineClamp, cb, cssClass) {
+function appendNodeAndQueueToElement(element, node, queue) {
+  var queueLength = queue && queue.length,
+      i, aNode, bNode;
+      
+  // add nodes waiting to be finalized
+  for(i = 0; i < queueLength; ++i) {
+    element.appendChild(queue[i]);
+  }
+  
+  if (nodeStack.length) {
+    // add nodes from the stack
+    i = nodeStack.length - 1;
+    // add the text to the last node on the stack
+    nodeStack[i].appendChild(node);
+    // ensure nodes from the stack are appended to each other
+    for (; i > 0 && (aNode = nodeStack[i]).parentNode !== (bNode = nodeStack[i - 1]); --i) {
+      bNode.appendChild(aNode);
+    }
+    // ensure root node from stack is added to measurement node
+    if ((aNode = nodeStack[0]).parentNode !== element) {
+      element.appendChild(aNode);
+    }
+  } else {
+    // add the text directly to the measurement node
+    element.appendChild(node);
+  }
+} // function appendNodeAndQueueToElement
+
+
+export default function clamp(el, lineClamp, cb, cssClass) {
     // make sure the element belongs to the document
     if (!el.ownerDocument || el.ownerDocument !== doc) {
       return;
@@ -232,5 +252,4 @@ export default (function(win, doc) {
 
     // call the callback with whether or not the text was truncated
     cb(lineCount > lineClamp);
-  }; // function clamp
-}(window, document));
+}; // function clamp
