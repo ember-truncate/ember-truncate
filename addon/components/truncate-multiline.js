@@ -119,7 +119,13 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
    * Kicks off the truncation after render.
    * @return {Void}
    */
-  didInsertElement() {
+  // didInsertElement() {
+  //   if (!this.get('_didTruncate')) {
+  //     this._doTruncation();
+  //   }
+  // },
+  
+  didRender() {
     if (!this.get('_didTruncate')) {
       this._doTruncation();
     }
