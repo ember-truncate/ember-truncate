@@ -141,16 +141,19 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
       Ember.run.scheduleOnce('afterRender', this, () => {
         let el = this.element.querySelector(`.${cssNamespace}--truncation-target`);
         let button = this.element.querySelector(`[class^=${cssNamespace}--button]`);
-        button.parentNode.removeChild(button);
-        clamp(el, this.get('lines'), (didTruncate) => this.set('_isTruncated', didTruncate), `${cssNamespace}--last-line`, window, document);
-        let ellipsizedSpan = el.lastChild;
-        el.removeChild(ellipsizedSpan);
-        let wrappingSpan = document.createElement('span');
-        wrappingSpan.classList.add(`${cssNamespace}--last-line-wrapper`);
-        wrappingSpan.appendChild(ellipsizedSpan);
-        wrappingSpan.appendChild(button);
-        el.appendChild(wrappingSpan);
-        this.set('_didTruncate', true);
+        
+        if (el) {
+          button.parentNode.removeChild(button);
+          clamp(el, this.get('lines'), (didTruncate) => this.set('_isTruncated', didTruncate), `${cssNamespace}--last-line`, window, document);
+          let ellipsizedSpan = el.lastChild;
+          el.removeChild(ellipsizedSpan);
+          let wrappingSpan = document.createElement('span');
+          wrappingSpan.classList.add(`${cssNamespace}--last-line-wrapper`);
+          wrappingSpan.appendChild(ellipsizedSpan);
+          wrappingSpan.appendChild(button);
+          el.appendChild(wrappingSpan);
+          this.set('_didTruncate', true);
+        }
       });
     }
   },
