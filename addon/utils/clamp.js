@@ -29,18 +29,17 @@ let measure,
     nextQueue,
     ce,
     ctn,
-    win,
-    doc;
+    _win,
+    _doc;
     
-function init(_win, _doc) {
-  console.log(typeof(_win), typeof(_doc));
+function init(win, doc) {
   
-  if (typeof(_win) && typeof(_doc)) {
-    win = _win;
-    doc = _doc
+  if (typeof(win) && typeof(doc)) {
+    _win = win;
+    _doc = doc
     
-    ce = doc.createElement.bind(doc);
-    ctn = doc.createTextNode.bind(doc);
+    ce = _doc.createElement.bind(_doc);
+    ctn = _doc.createTextNode.bind(_doc);
     // measurement element is made a child of the clamped element to get it's style
     measure = ce('span');
     
