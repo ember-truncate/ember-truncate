@@ -116,12 +116,41 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
   _didTruncate: false,
 
   /**
+   * Resets the component when the `text` attribute of the component has changed
+   * @return {Void}
+   */
+  didUpdateAttrs(attrs) {
+    this._super(attrs);
+    if (attrs.oldAttrs.text && attrs.newAttrs.text && attrs.oldAttrs.text.value !== attrs.newAttrs.text.value) {
+      this._resetState();
+    }
+  },
+
+  /**
    * Kicks off the truncation after render.
    * @return {Void}
    */
   didRender() {
+    this._super(...arguments);
     if (!this.get('_didTruncate')) {
       this._doTruncation();
+    }
+  },
+
+  /**
+   * Resets the state of the component
+   * @return {Void}
+   * @private
+   */
+  _resetState() {
+    let truncate = this.get('truncate');
+    if (truncate) {
+      // trigger a rerender/retruncate
+      this.set('_didTruncate', false);
+      this.set('truncate', false);
+      Ember.run.scheduleOnce('afterRender', this, () => {
+        this.set('truncate', truncate);
+      });
     }
   },
 
@@ -154,15 +183,7 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
    * @return {Void}
    */
   resize() {
-    let truncate = this.get('truncate');
-    if (truncate) {
-      // trigger a rerender/retruncate
-      this.set('_didTruncate', false);
-      this.set('truncate', false);
-      Ember.run.scheduleOnce('afterRender', this, () => {
-        this.set('truncate', truncate);
-      });
-    }
+    this._resetState();
   },
 
   /**
@@ -170,7 +191,7 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
    * @property resizeOnInsert
    * @type {Boolean}
    */
-  resizeOnInsert: Ember.computed(() => false),
+  resizeOnInsert: false,
 
   actions: {
     /**
