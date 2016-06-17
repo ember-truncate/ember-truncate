@@ -121,7 +121,8 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
    */
   didUpdateAttrs(attrs) {
     this._super(attrs);
-    if (attrs.oldAttrs.text && attrs.newAttrs.text && attrs.oldAttrs.text.value !== attrs.newAttrs.text.value) {
+
+    if (didAttrChange(attrs, 'text') || didAttrChange(attrs, 'truncate') || didAttrChange(attrs, 'lines')) {
       this._resetState();
     }
   },
@@ -213,7 +214,6 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
           }
         }
       } else {
-        this._doTruncation();
         let onCollapse = this.attrs.onCollapse;
 
         if (onCollapse) {
@@ -237,3 +237,38 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
     }
   }
 });
+
+/**
+ * Helper function to determine if an attribute has changed.
+ * @private
+ * @param attrs {Object}
+ * @param name {String}
+ * @return {Boolean}
+ */
+function didAttrChange(attrs, name) {
+  let oldAttr = attrs.oldAttrs[name];
+  let newAttr = attrs.newAttrs[name];
+
+  // If both attrs are undefined, nothing has changed
+  if (oldAttr == null && newAttr == null) {
+    return false;
+  }
+
+  // If only one attr is undefined, it must have changed
+  if (oldAttr == null || newAttr == null) {
+    return true;
+  }
+
+  /**
+  * In integration tests, the attributes passed to 'didUpdateAttrs' are objects,
+  * while in the app they are the values of the attributes themselves.
+  *
+  * However, if the value of the passed attribute hasn't changed it is NOT an object,
+  * it is the value itself.
+  */
+  oldAttr = oldAttr.value || oldAttr;
+  newAttr = newAttr.value || newAttr;
+
+  // toString is called in case a user has passed in a SafeString
+  return ((oldAttr.toString && oldAttr.toString() || oldAttr) !== (newAttr.toString && newAttr.toString() || newAttr));
+}
