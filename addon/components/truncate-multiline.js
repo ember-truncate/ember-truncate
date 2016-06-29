@@ -214,6 +214,9 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
           }
         }
       } else {
+        // Need to reset state when the text is retruncated via the 'See Less' button
+        this._resetState();
+
         let onCollapse = this.attrs.onCollapse;
 
         if (onCollapse) {

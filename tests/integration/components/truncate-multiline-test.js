@@ -123,22 +123,28 @@ test('clicking the button shows/hides full text', function(assert) {
     </div>
   `);
 
-  let this$ = this.$().clone();
+  let $clone1 = this.$().clone();
   // remove attributes we have no control over
-  this$.find('[id^=ember]').removeAttr('id');
-  this$.find('[data-ember-action]').removeAttr('data-ember-action');
+  $clone1.find('[id^=ember]').removeAttr('id');
+  $clone1.find('[data-ember-action]').removeAttr('data-ember-action');
 
-  assert.equal(this$.html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious </span><span>supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span class="truncate-multiline--last-line">supercalifragilisticexpialidocious supercalifragilisticexpialidocious</span><button class="truncate-multiline--button">see more</button></span></div></div></div>', 'truncated before clicking button');
+  assert.equal($clone1.html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious </span><span>supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span class="truncate-multiline--last-line">supercalifragilisticexpialidocious supercalifragilisticexpialidocious</span><button class="truncate-multiline--button">see more</button></span></div></div></div>', 'truncated before clicking button');
 
   this.$('button').click();
+  let $clone2 = this.$().clone();
   // remove attributes we have no control over
-  this.$('[id^=ember]').removeAttr('id');
-  this.$('[data-ember-action]').removeAttr('data-ember-action');
+  $clone2.find('[id^=ember]').removeAttr('id');
+  $clone2.find('[data-ember-action]').removeAttr('data-ember-action');
 
-  assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view">supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious<button class="truncate-multiline--button">see less</button></div></div>', 'not truncated after clicking button');
+  assert.equal($clone2.html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view">supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious<button class="truncate-multiline--button">see less</button></div></div>', 'not truncated after clicking button');
 
   this.$('button').click();
-  assert.equal(this$.html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious </span><span>supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span class="truncate-multiline--last-line">supercalifragilisticexpialidocious supercalifragilisticexpialidocious</span><button class="truncate-multiline--button">see more</button></span></div></div></div>', 'truncated before clicking button');
+  let $clone3 = this.$().clone();
+  // remove attributes we have no control over
+  $clone3.find('[id^=ember]').removeAttr('id');
+  $clone3.find('[data-ember-action]').removeAttr('data-ember-action');
+
+  assert.equal($clone3.html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious </span><span>supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span class="truncate-multiline--last-line">supercalifragilisticexpialidocious supercalifragilisticexpialidocious</span><button class="truncate-multiline--button">see more</button></span></div></div></div>', 'truncated after clicking button again');
 });
 
 test('truncation can be controlled externally via the truncate attribute', function(assert) {
