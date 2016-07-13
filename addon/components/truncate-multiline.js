@@ -131,6 +131,12 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
    * Kicks off the truncation after render.
    * @return {Void}
    */
+  // didInsertElement() {
+  //   if (!this.get('_didTruncate')) {
+  //     this._doTruncation();
+  //   }
+  // },
+  
   didRender() {
     this._super(...arguments);
     if (!this.get('_didTruncate')) {
@@ -165,13 +171,18 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
       Ember.run.scheduleOnce('afterRender', this, () => {
         let el = this.element.querySelector(`.${cssNamespace}--truncation-target`);
         let button = this.element.querySelector(`[class^=${cssNamespace}--button]`);
+        
+        
         button.parentNode.removeChild(button);
-        clamp(el, this.get('lines'), (didTruncate) => this.set('_isTruncated', didTruncate), `${cssNamespace}--last-line`);
+        clamp(el, this.get('lines'), (didTruncate) => this.set('_isTruncated', didTruncate), `${cssNamespace}--last-line`, window, document);
         let ellipsizedSpan = el.lastChild;
-        el.removeChild(ellipsizedSpan);
         let wrappingSpan = document.createElement('span');
         wrappingSpan.classList.add(`${cssNamespace}--last-line-wrapper`);
-        wrappingSpan.appendChild(ellipsizedSpan);
+        
+        if (ellipsizedSpan) {
+          el.removeChild(ellipsizedSpan);
+          wrappingSpan.appendChild(ellipsizedSpan);
+        }
         wrappingSpan.appendChild(button);
         el.appendChild(wrappingSpan);
         this.set('_didTruncate', true);
@@ -202,10 +213,10 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
     toggleTruncate() {
       let wasTruncated = this.get('truncate');
       this.toggleProperty('truncate');
-
+      
       if (wasTruncated) {
         let onExpand = this.attrs.onExpand;
-
+        
         if (onExpand) {
           if (typeof onExpand === 'function') {
             onExpand();
@@ -218,7 +229,7 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
         this._resetState();
 
         let onCollapse = this.attrs.onCollapse;
-
+        
         if (onCollapse) {
           if (typeof onCollapse === 'function') {
             onCollapse();
@@ -227,9 +238,9 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
           }
         }
       }
-
+      
       let onToggleTruncate = this.attrs.onToggleTruncate;
-
+      
       if (onToggleTruncate) {
         if (typeof onToggleTruncate === 'function') {
           onToggleTruncate(!wasTruncated);
