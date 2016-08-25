@@ -7,7 +7,7 @@ This addon provides a component for truncating blocks of text.
 
 ## Installation
 
-* `npm install ember-truncate`
+`ember install ember-truncate`
 
 ## Usage
 
