@@ -4,8 +4,7 @@
 module.exports = {
   name: 'ember-truncate',
   included: function(app) {
-    var app,
-      current = this;
+    var current = this;
 
     // If the addon has the _findHost() method (in ember-cli >= 2.7.0), we'll just
     // use that.
