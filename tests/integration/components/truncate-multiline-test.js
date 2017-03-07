@@ -98,6 +98,52 @@ test('specifying different button texts works', function(assert) {
   assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view">supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious<button class="truncate-multiline--button">then click me</button></div></div>', 'custom "see less" text is correct');
 });
 
+test('specifying different button a11y texts works', function(assert) {
+  // Template block usage:
+  this.render(hbs`
+    <div style="width: 362px; font: 16px sans-serif;">
+      {{truncate-multiline seeMoreButtonText="click me" seeMoreButtonA11yText="Show more about this test" seeLessButtonText="then click me" seeLessButtonA11yText="Show less about this test" text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
+    </div>
+  `);
+
+  let this$ = this.$().clone();
+  // remove attributes we have no control over
+  this$.find('[id^=ember]').removeAttr('id');
+  this$.find('[data-ember-action]').removeAttr('data-ember-action');
+
+  assert.equal(this$.html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious </span><span>supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span class="truncate-multiline--last-line">supercalifragilisticexpialidocious supercalifragilisticexpialidocious</span><button class="truncate-multiline--button"><span aria-hidden=\"true\">click me</span><span class=\"truncate-multiline--visually-hidden\">Show more about this test</span></button></span></div></div></div>', 'custom "see more" text and a11y is correct');
+
+  this.$('button').click();
+  // remove attributes we have no control over
+  this.$('[id^=ember]').removeAttr('id');
+  this.$('[data-ember-action]').removeAttr('data-ember-action');
+
+  assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view">supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious<button class="truncate-multiline--button"><span aria-hidden=\"true\">then click me</span><span class=\"truncate-multiline--visually-hidden\">Show less about this test</span></button></div></div>', 'custom "see less" text and a11y is correct');
+});
+
+test('specifying equal button and a11y texts works', function(assert) {
+  // Template block usage:
+  this.render(hbs`
+    <div style="width: 362px; font: 16px sans-serif;">
+      {{truncate-multiline seeMoreButtonText="click me" seeMoreButtonA11yText="click me" seeLessButtonText="then click me" seeLessButtonA11yText="then click me" text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
+    </div>
+  `);
+
+  let this$ = this.$().clone();
+  // remove attributes we have no control over
+  this$.find('[id^=ember]').removeAttr('id');
+  this$.find('[data-ember-action]').removeAttr('data-ember-action');
+
+  assert.equal(this$.html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious </span><span>supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span class="truncate-multiline--last-line">supercalifragilisticexpialidocious supercalifragilisticexpialidocious</span><button class="truncate-multiline--button">click me</button></span></div></div></div>', 'custom "see more" text is correct');
+
+  this.$('button').click();
+  // remove attributes we have no control over
+  this.$('[id^=ember]').removeAttr('id');
+  this.$('[data-ember-action]').removeAttr('data-ember-action');
+
+  assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view">supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious<button class="truncate-multiline--button">then click me</button></div></div>', 'custom "see less" text is correct');
+});
+
 test('the button is hidden if the text isn\'t long enough to truncate', function(assert) {
   // Template block usage:
   this.render(hbs`
@@ -268,7 +314,7 @@ test('resizing triggers truncation recompute', function(assert) {
   this.$('[data-ember-action]').removeAttr('data-ember-action');
 
   assert.equal(this.$('#truncate-multiline--test-container')[0].style.width, '540px', 'the container was resized');
-  assert.equal(this.$('#truncate-multiline--test-container').html().replace(/\n|  +/g, ''), '<div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span>supercalifragilisticexpialidocious supercalifragilisticexpialidocious</span><button class="truncate-multiline--button-hidden"></button></span></div></div>', 'truncation after resizing');
+  assert.equal(this.$('#truncate-multiline--test-container').html().replace(/\n|  +/g, ''), '<div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span>supercalifragilisticexpialidocious supercalifragilisticexpialidocious</span><button class="truncate-multiline--button-hidden"><!----></button></span></div></div>', 'truncation after resizing');
 });
 
 test('clicking the see more/less button fires user defined actions', function(assert) {
@@ -326,7 +372,7 @@ test('changing the component\'s text changes the resulting markup', function(ass
   this.$('[id^=ember]').removeAttr('id');
   this.$('[data-ember-action]').removeAttr('data-ember-action');
 
-  assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span class="truncate-multiline--last-line-wrapper"><span>supercalifragilisticexpialidocious</span><button class="truncate-multiline--button-hidden"></button></span></div></div></div>', 'new text is rendered correctly');
+  assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span class="truncate-multiline--last-line-wrapper"><span>supercalifragilisticexpialidocious</span><button class="truncate-multiline--button-hidden"><!----></button></span></div></div></div>', 'new text is rendered correctly');
 });
 
 test('changing the component\'s lines changes the resulting markup', function(assert) {
