@@ -49,6 +49,13 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
   truncate: true,
 
   /**
+   * Internal state of whether or not to truncate the text.
+   * @type {Boolean}
+   * @private
+   */
+  _truncate: true,
+
+  /**
    * Whether the text needed truncating or was short enough already.
    * @property isTruncated
    * @type {Boolean}
@@ -138,6 +145,10 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
   didUpdateAttrs(attrs) {
     this._super(attrs);
 
+    if (didAttrChange(attrs, 'truncate')) {
+      this.set('_truncate', this.get('truncate'));
+    }
+
     if (didAttrChange(attrs, 'text') || didAttrChange(attrs, 'truncate') || didAttrChange(attrs, 'lines')) {
       this._resetState();
     }
@@ -160,13 +171,13 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
    * @private
    */
   _resetState() {
-    let truncate = this.get('truncate');
+    let truncate = this.get('_truncate');
     if (truncate) {
       // trigger a rerender/retruncate
       this.set('_didTruncate', false);
-      this.set('truncate', false);
+      this.set('_truncate', false);
       Ember.run.scheduleOnce('afterRender', this, () => {
-        this.set('truncate', truncate);
+        this.set('_truncate', truncate);
       });
     }
   },
@@ -177,7 +188,7 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
    * @private
    */
   _doTruncation() {
-    if (this.get('truncate')) {
+    if (this.get('_truncate')) {
       Ember.run.scheduleOnce('afterRender', this, () => {
         let el = this.element.querySelector(`.${cssNamespace}--truncation-target`);
         let button = this.element.querySelector(`[class^=${cssNamespace}--button]`);
@@ -216,8 +227,8 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
      * @return {Void}
      */
     toggleTruncate() {
-      let wasTruncated = this.get('truncate');
-      this.toggleProperty('truncate');
+      let wasTruncated = this.get('_truncate');
+      this.toggleProperty('_truncate');
 
       if (wasTruncated) {
         let onExpand = this.attrs.onExpand;
@@ -299,5 +310,8 @@ function didAttrChange(attrs, name) {
   newAttr = newAttr.value || newAttr;
 
   // toString is called in case a user has passed in a SafeString
-  return ((oldAttr.toString && oldAttr.toString() || oldAttr) !== (newAttr.toString && newAttr.toString() || newAttr));
+  oldAttr = oldAttr.toString && oldAttr.toString() || oldAttr;
+  newAttr = newAttr.toString && newAttr.toString() || newAttr;
+
+  return oldAttr !== newAttr;
 }
