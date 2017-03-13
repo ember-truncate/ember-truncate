@@ -201,19 +201,19 @@ test('specifying different button a11y texts works', function(assert) {
     </div>
   `);
 
-  let this$ = this.$().clone();
-  // remove attributes we have no control over
-  this$.find('[id^=ember]').removeAttr('id');
-  this$.find('[data-ember-action]').removeAttr('data-ember-action');
-
-  assert.equal(this$.html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious </span><span>supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span class="truncate-multiline--last-line">supercalifragilisticexpialidocious supercalifragilisticexpialidocious</span><button class="truncate-multiline--button"><span aria-hidden=\"true\">click me</span><span class=\"truncate-multiline--visually-hidden\">Show more about this test</span></button></span></div></div></div>', 'custom "see more" text and a11y is correct');
+  assert.equal(
+    this.$('.truncate-multiline--visually-hidden').text().trim(),
+    'Show more about this test',
+    'custom "see more" and a11y text is correct'
+  );
 
   this.$('button').click();
-  // remove attributes we have no control over
-  this.$('[id^=ember]').removeAttr('id');
-  this.$('[data-ember-action]').removeAttr('data-ember-action');
 
-  assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view">supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious<button class="truncate-multiline--button"><span aria-hidden=\"true\">then click me</span><span class=\"truncate-multiline--visually-hidden\">Show less about this test</span></button></div></div>', 'custom "see less" text and a11y is correct');
+  assert.equal(
+    this.$('.truncate-multiline--visually-hidden').text().trim(),
+    'Show less about this test',
+    'custom "see less" and a11y text is correct'
+  );
 });
 
 test('specifying equal button and a11y texts works', function(assert) {
@@ -224,19 +224,31 @@ test('specifying equal button and a11y texts works', function(assert) {
     </div>
   `);
 
-  let this$ = this.$().clone();
-  // remove attributes we have no control over
-  this$.find('[id^=ember]').removeAttr('id');
-  this$.find('[data-ember-action]').removeAttr('data-ember-action');
+  assert.equal(
+    this.$('.truncate-multiline--button').text().trim(),
+    'click me',
+    'custom "see more" text is correct'
+  );
 
-  assert.equal(this$.html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view"><div class="truncate-multiline--truncation-target"><span>supercalifragilisticexpialidocious </span><span>supercalifragilisticexpialidocious </span><span class="truncate-multiline--last-line-wrapper"><span class="truncate-multiline--last-line">supercalifragilisticexpialidocious supercalifragilisticexpialidocious</span><button class="truncate-multiline--button">click me</button></span></div></div></div>', 'custom "see more" text is correct');
+  assert.equal(
+    this.$('.truncate-multiline--visually-hidden').length,
+    0,
+    'custom a11y text is not present'
+  );
 
   this.$('button').click();
-  // remove attributes we have no control over
-  this.$('[id^=ember]').removeAttr('id');
-  this.$('[data-ember-action]').removeAttr('data-ember-action');
 
-  assert.equal(this.$().html().replace(/\n|  +/g, ''), '<div style="width: 362px; font: 16px sans-serif;"><div class="ember-view">supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious<button class="truncate-multiline--button">then click me</button></div></div>', 'custom "see less" text is correct');
+  assert.equal(
+    this.$('.truncate-multiline--button').text().trim(),
+    'then click me',
+    'custom "see less" text is correct'
+  );
+
+  assert.equal(
+    this.$('.truncate-multiline--visually-hidden').length,
+    0,
+    'custom a11y text is not present'
+  );
 });
 
 test('the button is hidden if the text isn\'t long enough to truncate', function(assert) {
