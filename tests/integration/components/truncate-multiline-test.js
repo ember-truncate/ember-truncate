@@ -194,7 +194,6 @@ test('specifying different button texts works', function(assert) {
 });
 
 test('specifying different button a11y texts works', function(assert) {
-  // Template block usage:
   this.render(hbs`
     <div style="width: 362px; font: 16px sans-serif;">
       {{truncate-multiline seeMoreButtonText="click me" seeMoreButtonA11yText="Show more about this test" seeLessButtonText="then click me" seeLessButtonA11yText="Show less about this test" text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
@@ -204,7 +203,7 @@ test('specifying different button a11y texts works', function(assert) {
   assert.equal(
     this.$('.truncate-multiline--visually-hidden').text().trim(),
     'Show more about this test',
-    'custom "see more" and a11y text is correct'
+    'custom "see more" a11y text is correct'
   );
 
   this.$('button').click();
@@ -212,12 +211,11 @@ test('specifying different button a11y texts works', function(assert) {
   assert.equal(
     this.$('.truncate-multiline--visually-hidden').text().trim(),
     'Show less about this test',
-    'custom "see less" and a11y text is correct'
+    'custom "see less" a11y text is correct'
   );
 });
 
 test('specifying equal button and a11y texts works', function(assert) {
-  // Template block usage:
   this.render(hbs`
     <div style="width: 362px; font: 16px sans-serif;">
       {{truncate-multiline seeMoreButtonText="click me" seeMoreButtonA11yText="click me" seeLessButtonText="then click me" seeLessButtonA11yText="then click me" text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
@@ -233,7 +231,7 @@ test('specifying equal button and a11y texts works', function(assert) {
   assert.equal(
     this.$('.truncate-multiline--visually-hidden').length,
     0,
-    'custom a11y text is not present'
+    'custom "see more" a11y text is not present'
   );
 
   this.$('button').click();
@@ -247,7 +245,7 @@ test('specifying equal button and a11y texts works', function(assert) {
   assert.equal(
     this.$('.truncate-multiline--visually-hidden').length,
     0,
-    'custom a11y text is not present'
+    'custom "see less" a11y text is not present'
   );
 });
 
