@@ -100,6 +100,18 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
   seeLessButtonText: 'see less',
 
   /**
+   * The text to speak aloud in the "see more" button.
+   * @type {String}
+   */
+  seeMoreButtonA11yText: '',
+
+  /**
+   * The text to speak aloud in the "see less" button.
+   * @type {String}
+   */
+  seeLessButtonA11yText: '',
+
+  /**
    * Whether or not the "see more" button should be visible.
    * @property _shouldShowSeeMoreButton
    * @type {Boolean}
@@ -114,6 +126,10 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
    * @private
    */
   _shouldShowSeeLessButton: Ember.computed.and('showButton', 'showSeeLessButton', 'isTruncated'),
+
+  _shouldSupportSeeMoreButtonA11y: Ember.computed('_shouldShowSeeMoreButton', 'seeMoreButtonText', 'seeMoreButtonA11yText', shouldSupportButtonA11y('More')),
+
+  _shouldSupportSeeLessButtonA11y: Ember.computed('_shouldShowSeeLessButton', 'seeLessButtonText', 'seeLessButtonA11yText', shouldSupportButtonA11y('Less')),
 
   /**
    * Keeps track of whether or not _doTruncate has been run.
@@ -251,6 +267,16 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
     }
   }
 });
+
+function shouldSupportButtonA11y(type) {
+  return function compute() {
+    const shouldShowButton = this.get(`_shouldShowSee${type}Button`);
+    const seeButtonText = this.getWithDefault(`see${type}ButtonText`, '').trim();
+    const seeButtonA11yText = this.getWithDefault(`see${type}ButtonA11yText`, '').trim();
+
+    return shouldShowButton && seeButtonA11yText.length && seeButtonText !== seeButtonA11yText;
+  };
+}
 
 /**
  * Helper function to determine if an attribute has changed.

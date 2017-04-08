@@ -193,6 +193,62 @@ test('specifying different button texts works', function(assert) {
   );
 });
 
+test('specifying different button a11y texts works', function(assert) {
+  this.render(hbs`
+    <div style="width: 362px; font: 16px sans-serif;">
+      {{truncate-multiline seeMoreButtonText="click me" seeMoreButtonA11yText="Show more about this test" seeLessButtonText="then click me" seeLessButtonA11yText="Show less about this test" text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
+    </div>
+  `);
+
+  assert.equal(
+    this.$('.truncate-multiline--visually-hidden').text().trim(),
+    'Show more about this test',
+    'custom "see more" a11y text is correct'
+  );
+
+  this.$('button').click();
+
+  assert.equal(
+    this.$('.truncate-multiline--visually-hidden').text().trim(),
+    'Show less about this test',
+    'custom "see less" a11y text is correct'
+  );
+});
+
+test('specifying equal button and a11y texts works', function(assert) {
+  this.render(hbs`
+    <div style="width: 362px; font: 16px sans-serif;">
+      {{truncate-multiline seeMoreButtonText="click me" seeMoreButtonA11yText="click me" seeLessButtonText="then click me" seeLessButtonA11yText="then click me" text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
+    </div>
+  `);
+
+  assert.equal(
+    this.$('.truncate-multiline--button').text().trim(),
+    'click me',
+    'custom "see more" text is correct'
+  );
+
+  assert.equal(
+    this.$('.truncate-multiline--visually-hidden').length,
+    0,
+    'custom "see more" a11y text is not present'
+  );
+
+  this.$('button').click();
+
+  assert.equal(
+    this.$('.truncate-multiline--button').text().trim(),
+    'then click me',
+    'custom "see less" text is correct'
+  );
+
+  assert.equal(
+    this.$('.truncate-multiline--visually-hidden').length,
+    0,
+    'custom "see less" a11y text is not present'
+  );
+});
+
 test('the button is hidden if the text isn\'t long enough to truncate', function(assert) {
   // Template block usage:
   this.render(hbs`
