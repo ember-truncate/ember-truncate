@@ -1,5 +1,6 @@
 /* global CustomEvent */
 
+import Ember from 'ember';
 import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 import wait from 'ember-test-helpers/wait';
@@ -576,5 +577,27 @@ test('changing the component\'s lines changes the resulting markup', function(as
     $truncationTarget.children().length,
     3,
     'new number of chunks is respected'
+  );
+});
+
+test('<BR>s are replaced with spaces in truncated output', function(assert) {
+  assert.expect(1);
+
+  this.set('lineToTruncate', 1);
+  this.set('text', Ember.String.htmlSafe('supercalifragilisticexpialidocious<br><br>supercalifragilisticexpialidocious<br>supercalifragilisticexpialidocious'));
+
+  this.render(hbs`
+    <div style="width: 362px; font: 16px sans-serif;">
+      {{truncate-multiline
+        text=text
+        lines=lineToTruncate
+      }}
+    </div>
+  `);
+
+  let $truncationTarget = this.$('.truncate-multiline--last-line');
+  assert.equal(
+    $truncationTarget[0].innerHTML,
+    'supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious'
   );
 });
