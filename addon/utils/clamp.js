@@ -70,8 +70,18 @@ export default (function(win, doc) {
 
     // get all nodes and remove them
     while (el.firstChild !== null) {
-      seedQueue.push(el.firstChild);
-      el.removeChild(el.firstChild);
+      // conver BR tag to space
+      if (el.firstChild.tagName === 'BR') {
+        seedQueue.push(ctn(' '));
+        el.removeChild(el.firstChild);
+        // remove remaining BR tags in a sequence
+        while (el.firstChild !== null && el.firstChild.tagName === 'BR') {
+          el.removeChild(el.firstChild);
+        }
+      } else {
+        seedQueue.push(el.firstChild);
+        el.removeChild(el.firstChild);
+      }
     }
 
     // add measurement element within so it inherits styles
