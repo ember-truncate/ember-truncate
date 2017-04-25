@@ -3,7 +3,13 @@
 
 module.exports = {
   name: 'ember-truncate',
-  included: function(app) {
-    app.import('vendor/styles/truncate-multiline.css');
+  included: function(app, parentAddon) {
+    var target = (parentAddon || app);
+
+    if (target.app) {
+      target = target.app;
+    }
+
+    target.import('vendor/styles/truncate-multiline.css');
   }
 };
