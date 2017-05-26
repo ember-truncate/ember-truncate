@@ -160,8 +160,8 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
    */
   didRender() {
     this._super(...arguments);
-    if (!this.get('_didTruncate')) {
-      this._doTruncation();
+    if (!this.get('_didTruncate') && this.get('_truncate')) {
+      Ember.run.scheduleOnce('afterRender', this, this._doTruncation);
     }
   },
 
@@ -188,23 +188,21 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
    * @private
    */
   _doTruncation() {
-    if (this.get('_truncate')) {
-      Ember.run.scheduleOnce('afterRender', this, () => {
-        let el = this.element.querySelector(`.${cssNamespace}--truncation-target`);
-        let button = this.element.querySelector(`[class^=${cssNamespace}--button]`);
-        button.parentNode.removeChild(button);
-        clamp(el, this.get('lines'), (didTruncate) => this.set('_isTruncated', didTruncate), `${cssNamespace}--last-line`);
-        let ellipsizedSpan = el.lastChild;
-        el.removeChild(ellipsizedSpan);
-        let wrappingSpan = document.createElement('span');
-        wrappingSpan.classList.add(`${cssNamespace}--last-line-wrapper`);
-        wrappingSpan.appendChild(ellipsizedSpan);
-        wrappingSpan.appendChild(button);
-        el.appendChild(wrappingSpan);
-        this.set('_didTruncate', true);
-      });
-    }
+    let el = this.element.querySelector(`.${cssNamespace}--truncation-target`);
+    let button = this.element.querySelector(`[class^=${cssNamespace}--button]`);
+    button.parentNode.removeChild(button);
+    clamp(el, this.get('lines'), (didTruncate) => this.set('_isTruncated', didTruncate), `${cssNamespace}--last-line`);
+    let ellipsizedSpan = el.lastChild;
+    el.removeChild(ellipsizedSpan);
+    let wrappingSpan = document.createElement('span');
+    wrappingSpan.classList.add(`${cssNamespace}--last-line-wrapper`);
+    wrappingSpan.appendChild(ellipsizedSpan);
+    wrappingSpan.appendChild(button);
+    el.appendChild(wrappingSpan);
+    this.set('_didTruncate', true);
   },
+
+
 
   /**
    * Kicks off truncation on resize by triggering a rerender.

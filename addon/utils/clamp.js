@@ -19,15 +19,6 @@ export default (function(win, doc) {
     ce = doc.createElement.bind(doc),
     ctn = doc.createTextNode.bind(doc);
 
-  // measurement element is made a child of the clamped element to get it's style
-  measure = ce('span');
-
-  (function(s) {
-    s.position = 'absolute'; // prevent page reflow
-    s.whiteSpace = 'pre'; // cross-browser width results
-    s.visibility = 'hidden'; // prevent drawing
-  }(measure.style));
-
   function appendNodeAndQueueToElement(element, node, queue) {
     var queueLength = queue && queue.length,
         i, aNode, bNode;
@@ -83,6 +74,12 @@ export default (function(win, doc) {
         el.removeChild(el.firstChild);
       }
     }
+
+    // measurement element is made a child of the clamped element to get it's style
+    measure = ce('span');
+    measure.style.position = 'absolute'; // prevent page reflow
+    measure.style.whiteSpace = 'pre'; // cross-browser width results
+    measure.style.visibility = 'hidden'; // prevent drawingg
 
     // add measurement element within so it inherits styles
     el.appendChild(measure);
@@ -242,5 +239,14 @@ export default (function(win, doc) {
 
     // call the callback with whether or not the text was truncated
     cb(lineCount > lineClamp);
+
+    function cleanup() {
+      thisNode = null;
+      textNode = null;
+      measure = null;
+      line = null;
+    }
+
+    cleanup();
   }; // function clamp
 }(window, document));
