@@ -91,7 +91,7 @@ export default (function(win, doc) {
     }
 
     // add measurement element within so it inherits styles
-    createMeasureElement()
+    createMeasureElement();
     el.appendChild(measure);
 
     function clampNodeRecurse(nodeQueue) {
