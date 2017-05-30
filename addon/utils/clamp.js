@@ -45,6 +45,21 @@ export default (function(win, doc) {
     }
   } // function appendNodeAndQueueToElement
 
+  function cleanup() {
+    thisNode = null;
+    textNode = null;
+    measure = null;
+    line = null;
+  } // function cleanup
+
+  function createMeasureElement() {
+    // measurement element is made a child of the clamped element to get it's style
+    measure = ce('span');
+    measure.style.position = 'absolute'; // prevent page reflow
+    measure.style.whiteSpace = 'pre'; // cross-browser width results
+    measure.style.visibility = 'hidden'; // prevent drawing
+  } // function createMeasureElement
+
   return function clamp(el, lineClamp, cb, cssClass) {
     // make sure the element belongs to the document
     if (!el.ownerDocument || el.ownerDocument !== doc) {
@@ -75,13 +90,8 @@ export default (function(win, doc) {
       }
     }
 
-    // measurement element is made a child of the clamped element to get it's style
-    measure = ce('span');
-    measure.style.position = 'absolute'; // prevent page reflow
-    measure.style.whiteSpace = 'pre'; // cross-browser width results
-    measure.style.visibility = 'hidden'; // prevent drawingg
-
     // add measurement element within so it inherits styles
+    createMeasureElement()
     el.appendChild(measure);
 
     function clampNodeRecurse(nodeQueue) {
@@ -239,13 +249,6 @@ export default (function(win, doc) {
 
     // call the callback with whether or not the text was truncated
     cb(lineCount > lineClamp);
-
-    function cleanup() {
-      thisNode = null;
-      textNode = null;
-      measure = null;
-      line = null;
-    }
 
     cleanup();
   }; // function clamp
