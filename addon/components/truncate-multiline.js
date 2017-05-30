@@ -202,8 +202,6 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
     this.set('_didTruncate', true);
   },
 
-
-
   /**
    * Kicks off truncation on resize by triggering a rerender.
    * @return {Void}
