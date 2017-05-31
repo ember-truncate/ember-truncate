@@ -267,8 +267,8 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
 function shouldSupportButtonA11y(type) {
   return function compute() {
     const shouldShowButton = this.get(`_shouldShowSee${type}Button`);
-    const seeButtonText = this.getWithDefault(`see${type}ButtonText`, '').trim();
-    const seeButtonA11yText = this.getWithDefault(`see${type}ButtonA11yText`, '').trim();
+    const seeButtonText = this.getWithDefault(`see${type}ButtonText`, '');
+    const seeButtonA11yText = this.getWithDefault(`see${type}ButtonA11yText`, '');
 
     return shouldShowButton && seeButtonA11yText.length && seeButtonText !== seeButtonA11yText;
   };
