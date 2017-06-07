@@ -601,3 +601,34 @@ test('<BR>s are replaced with spaces in truncated output', function(assert) {
     'supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious'
   );
 });
+
+test('SafeStrings work as button text', function(assert) {
+  assert.expect(2);
+
+  this.set('lineToTruncate', 1);
+  this.set('text', 'supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious');
+  this.set('buttonText', Ember.String.htmlSafe('see <i>more</i>'));
+  this.set('a11yText', Ember.String.htmlSafe(' ' + this.get('buttonText') + ' '));
+
+  this.render(hbs`
+    <div style="width: 362px; font: 16px sans-serif;">
+      {{truncate-multiline
+        text=text
+        lines=lineToTruncate
+        seeMoreButtonText=buttonText
+        seeMoreButtonA11yText=a11yText
+      }}
+    </div>
+  `);
+
+  let $toggleButton = this.$('.truncate-multiline--button');
+  assert.equal(
+    $toggleButton[0].innerHTML.trim(),
+    'see <i>more</i>',
+    'SafeString is rendered as button text'
+  );
+  assert.notOk(
+    $toggleButton.find('.truncate-multiline--visually-hidden')[0],
+    'a11y text not rendered b/c it matches display text'
+  );
+});
