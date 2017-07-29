@@ -138,20 +138,38 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
    */
   _didTruncate: false,
 
+  init() {
+    this._super(...arguments);
+
+    this._updateOldAttributes();
+  },
+
   /**
    * Resets the component when the `text` attribute of the component has changed
    * @return {Void}
    */
-  didUpdateAttrs(attrs) {
-    this._super(attrs);
+  didUpdateAttrs() {
+    const oldText = this.get('_oldText');
+    const oldTruncate = this.get('_oldTruncate');
+    const oldLines = this.get('_oldLines');
 
-    if (didAttrChange(attrs, 'truncate')) {
-      this.set('_truncate', this.get('truncate'));
+    const newText = this.get('text');
+    const newTruncate = this.get('truncate');
+    const newLines = this.get('lines');
+
+    if (didAttrChange(oldTruncate, newTruncate)) {
+      this.set('_truncate', newTruncate);
     }
 
-    if (didAttrChange(attrs, 'text') || didAttrChange(attrs, 'truncate') || didAttrChange(attrs, 'lines')) {
+    if (
+      didAttrChange(oldText, newText) ||
+      didAttrChange(oldTruncate, newTruncate) ||
+      didAttrChange(oldLines, newLines)
+    ) {
       this._resetState();
     }
+
+    this._updateOldAttributes();
   },
 
   /**
@@ -163,6 +181,16 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
     if (!this.get('_didTruncate') && this.get('_truncate')) {
       Ember.run.scheduleOnce('afterRender', this, this._doTruncation);
     }
+  },
+
+  /**
+   * Updates old attributes keeping track of changes
+   * @return {Void}
+   */
+  _updateOldAttributes() {
+    this.set('_oldText', this.get('text'));
+    this.set('_oldTruncate', this.get('truncate'));
+    this.set('_oldLines', this.get('lines'));
   },
 
   /**
@@ -277,37 +305,10 @@ function shouldSupportButtonA11y(type) {
 /**
  * Helper function to determine if an attribute has changed.
  * @private
- * @param attrs {Object}
- * @param name {String}
+ * @param oldAttribute {String|Boolean|Number}
+ * @param newAttribute {String|Boolean|Number}
  * @return {Boolean}
  */
-function didAttrChange(attrs, name) {
-  let oldAttr = attrs.oldAttrs[name];
-  let newAttr = attrs.newAttrs[name];
-
-  // If both attrs are undefined, nothing has changed
-  if (oldAttr == null && newAttr == null) {
-    return false;
-  }
-
-  // If only one attr is undefined, it must have changed
-  if (oldAttr == null || newAttr == null) {
-    return true;
-  }
-
-  /**
-  * In integration tests, the attributes passed to 'didUpdateAttrs' are objects,
-  * while in the app they are the values of the attributes themselves.
-  *
-  * However, if the value of the passed attribute hasn't changed it is NOT an object,
-  * it is the value itself.
-  */
-  oldAttr = oldAttr.value || oldAttr;
-  newAttr = newAttr.value || newAttr;
-
-  // toString is called in case a user has passed in a SafeString
-  oldAttr = oldAttr.toString && oldAttr.toString() || oldAttr;
-  newAttr = newAttr.toString && newAttr.toString() || newAttr;
-
-  return oldAttr !== newAttr;
+function didAttrChange(oldAttribute, newAttribute) {
+  return oldAttribute !== newAttribute;
 }
