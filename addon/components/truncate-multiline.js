@@ -2,6 +2,7 @@ import Ember from 'ember';
 import ResizeHandlerMixin from 'ember-singularity-mixins/mixins/resize-handler';
 import clamp from 'ember-truncate/utils/clamp';
 import layout from 'ember-truncate/templates/components/truncate-multiline';
+import diffAttrs from 'ember-diff-attrs';
 
 const cssNamespace = 'truncate-multiline';
 
@@ -142,17 +143,19 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
    * Resets the component when the `text` attribute of the component has changed
    * @return {Void}
    */
-  didUpdateAttrs(attrs) {
-    this._super(attrs);
+  didReceiveAttrs: diffAttrs('lines', 'text', 'truncate', function(changedAttrs) {
+    // `changedAttrs` will be null for the first invocation
+    // short circuiting for this case makes `didReceiveAttrs` act like `didUpdateAttrs`
+    if (changedAttrs == null) { return; }
 
-    if (didAttrChange(attrs, 'truncate')) {
+    if ('truncate' in changedAttrs) {
       this.set('_truncate', this.get('truncate'));
     }
 
-    if (didAttrChange(attrs, 'text') || didAttrChange(attrs, 'truncate') || didAttrChange(attrs, 'lines')) {
+    if ('text' in changedAttrs || 'truncate' in changedAttrs || 'lines' in changedAttrs) {
       this._resetState();
     }
-  },
+  }),
 
   /**
    * Kicks off the truncation after render.
@@ -272,42 +275,4 @@ function shouldSupportButtonA11y(type) {
 
     return shouldShowButton && seeButtonA11yText.length && seeButtonText !== seeButtonA11yText;
   };
-}
-
-/**
- * Helper function to determine if an attribute has changed.
- * @private
- * @param attrs {Object}
- * @param name {String}
- * @return {Boolean}
- */
-function didAttrChange(attrs, name) {
-  let oldAttr = attrs.oldAttrs[name];
-  let newAttr = attrs.newAttrs[name];
-
-  // If both attrs are undefined, nothing has changed
-  if (oldAttr == null && newAttr == null) {
-    return false;
-  }
-
-  // If only one attr is undefined, it must have changed
-  if (oldAttr == null || newAttr == null) {
-    return true;
-  }
-
-  /**
-  * In integration tests, the attributes passed to 'didUpdateAttrs' are objects,
-  * while in the app they are the values of the attributes themselves.
-  *
-  * However, if the value of the passed attribute hasn't changed it is NOT an object,
-  * it is the value itself.
-  */
-  oldAttr = oldAttr.value || oldAttr;
-  newAttr = newAttr.value || newAttr;
-
-  // toString is called in case a user has passed in a SafeString
-  oldAttr = oldAttr.toString && oldAttr.toString() || oldAttr;
-  newAttr = newAttr.toString && newAttr.toString() || newAttr;
-
-  return oldAttr !== newAttr;
 }
