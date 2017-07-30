@@ -63,6 +63,13 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
   _truncate: true,
 
   /**
+   * Whether the text is being truncated or not. Passed to the yielded namespace as `isTruncated`.
+   * @property truncationState
+   * @type {Boolean}
+   */
+  truncationState: Ember.computed.readOnly('_truncate'),
+
+  /**
    * Whether the text needed truncating or was short enough already.
    * @property isTruncated
    * @type {Boolean}
@@ -75,68 +82,6 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
    * @private
    */
   _isTruncated: false,
-
-  /**
-   * An override that can be used to hide both buttons.
-   * @type {Boolean}
-   */
-  showButton: true,
-
-  /**
-   * An override that can be used to hide the "see more" button.
-   * @type {Boolean}
-   */
-  showSeeMoreButton: true,
-
-  /**
-   * An override that can be used to hide the "see less" button.
-   * @type {Boolean}
-   */
-  showSeeLessButton: true,
-
-  /**
-   * The text to display in the "see more" button.
-   * @type {String}
-   */
-  seeMoreButtonText: 'see more',
-
-  /**
-   * The text to display in the "see less" button.
-   * @type {String}
-   */
-  seeLessButtonText: 'see less',
-
-  /**
-   * The text to speak aloud in the "see more" button.
-   * @type {String}
-   */
-  seeMoreButtonA11yText: '',
-
-  /**
-   * The text to speak aloud in the "see less" button.
-   * @type {String}
-   */
-  seeLessButtonA11yText: '',
-
-  /**
-   * Whether or not the "see more" button should be visible.
-   * @property _shouldShowSeeMoreButton
-   * @type {Boolean}
-   * @private
-   */
-  _shouldShowSeeMoreButton: Ember.computed.and('showButton', 'showSeeMoreButton', 'isTruncated'),
-
-  /**
-   * Whether or not the "see less" button should be visible.
-   * @property _shouldShowSeeLessButton
-   * @type {Boolean}
-   * @private
-   */
-  _shouldShowSeeLessButton: Ember.computed.and('showButton', 'showSeeLessButton', 'isTruncated'),
-
-  _shouldSupportSeeMoreButtonA11y: Ember.computed('_shouldShowSeeMoreButton', 'seeMoreButtonText', 'seeMoreButtonA11yText', shouldSupportButtonA11y('More')),
-
-  _shouldSupportSeeLessButtonA11y: Ember.computed('_shouldShowSeeLessButton', 'seeLessButtonText', 'seeLessButtonA11yText', shouldSupportButtonA11y('Less')),
 
   /**
    * Keeps track of whether or not _doTruncate has been run.
@@ -180,7 +125,7 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
    * @private
    */
   _resetState() {
-    let truncate = this.get('_truncate');
+    const truncate = this.get('_truncate');
     if (truncate) {
       // trigger a rerender/retruncate
       this.set('_didTruncate', false);
@@ -197,18 +142,20 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
    * @private
    */
   _doTruncation() {
-    const doc = this.get('document');
+const doc = this.get('document');
 
-    let el = this.element.querySelector(`.${cssNamespace}--truncation-target`);
-    let button = this.element.querySelector(`[class^=${cssNamespace}--button]`);
-    button.parentNode.removeChild(button);
+    const el = this.element.querySelector(`.${cssNamespace}--truncation-target`);
+    // TODO: make the assertion message more descriptive
+    Ember.assert('must use the `target` component from the yielded namespace', el instanceof HTMLElement);
+    const button = this.element.querySelector(`[class^=${cssNamespace}--button]`);
+    if (button != null) { button.parentNode.removeChild(button); }
     clamp(el, this.get('lines'), (didTruncate) => this.set('_isTruncated', didTruncate), `${cssNamespace}--last-line`, doc);
-    let ellipsizedSpan = el.lastChild;
+    const ellipsizedSpan = el.lastChild;
     el.removeChild(ellipsizedSpan);
-    let wrappingSpan = doc.createElement('span');
+    const wrappingSpan = doc.createElement('span');
     wrappingSpan.classList.add(`${cssNamespace}--last-line-wrapper`);
     wrappingSpan.appendChild(ellipsizedSpan);
-    wrappingSpan.appendChild(button);
+    if (button != null) { wrappingSpan.appendChild(button); }
     el.appendChild(wrappingSpan);
     this.set('_didTruncate', true);
   },
@@ -238,49 +185,24 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
       this.toggleProperty('_truncate');
 
       if (wasTruncated) {
-        let onExpand = this.attrs.onExpand;
-
-        if (onExpand) {
-          if (typeof onExpand === 'function') {
-            onExpand();
-          } else {
-            this.sendAction('onExpand');
-          }
+        const onExpand = this.onExpand;
+        if (typeof onExpand === 'function') {
+          onExpand();
         }
       } else {
         // Need to reset state when the text is retruncated via the 'See Less' button
         this._resetState();
 
-        let onCollapse = this.attrs.onCollapse;
-
-        if (onCollapse) {
-          if (typeof onCollapse === 'function') {
-            onCollapse();
-          } else {
-            this.sendAction('onCollapse');
-          }
+        const onCollapse = this.onCollapse;
+        if (typeof onCollapse === 'function') {
+          onCollapse();
         }
       }
 
-      let onToggleTruncate = this.attrs.onToggleTruncate;
-
-      if (onToggleTruncate) {
-        if (typeof onToggleTruncate === 'function') {
-          onToggleTruncate(!wasTruncated);
-        } else {
-          this.sendAction('onToggleTruncate', !wasTruncated);
-        }
+      const onToggleTruncate = this.onToggleTruncate;
+      if (typeof onToggleTruncate === 'function') {
+        onToggleTruncate(!wasTruncated);
       }
-    }
-  }
+    },
+  },
 });
-
-function shouldSupportButtonA11y(type) {
-  return function compute() {
-    const shouldShowButton = this.get(`_shouldShowSee${type}Button`);
-    const seeButtonText = ('' + this.getWithDefault(`see${type}ButtonText`, '')).trim();
-    const seeButtonA11yText = ('' + this.getWithDefault(`see${type}ButtonA11yText`, '')).trim();
-
-    return shouldShowButton && seeButtonA11yText.length && seeButtonText !== seeButtonA11yText;
-  };
-}

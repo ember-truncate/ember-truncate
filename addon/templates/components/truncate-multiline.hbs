@@ -1,31 +1,29 @@
-{{#if _truncate}}
-  <div class="truncate-multiline--truncation-target">
-    {{~#if hasBlock~}}
-      {{yield}}
-    {{~else~}}
-      {{text}}
-    {{~/if~}}
-  </div>
-  <button class="truncate-multiline--button{{if _shouldShowSeeMoreButton "" "-hidden"}}" {{action "toggleTruncate"}}>
-    {{#if _shouldSupportSeeMoreButtonA11y}}
-      <span aria-hidden="true">{{seeMoreButtonText}}</span>
-      <span class="truncate-multiline--visually-hidden">{{seeMoreButtonA11yText}}</span>
-    {{else if _shouldShowSeeMoreButton}}
-      {{seeMoreButtonText}}
-    {{/if}}
-  </button>
+{{#if hasBlock}}
+  {{#if _truncate}}
+    {{yield (hash
+      target=(component "ember-truncate/truncation-target")
+      button=(component "ember-truncate/button-toggle" onClick=(action "toggleTruncate"))
+      isTruncated=truncationState
+    )}}
+  {{else}}
+    {{yield (hash
+      target=(component "ember-truncate/truncation-noop")
+      button=(component "ember-truncate/button-toggle" onClick=(action "toggleTruncate"))
+      isTruncated=truncationState
+    )}}
+  {{/if}}
 {{else}}
-  {{#if hasBlock}}
-    {{yield}}
+  {{#if _truncate}}
+    {{#ember-truncate/truncation-target}}
+    {{text}}
+    {{/ember-truncate/truncation-target}}
+    {{#ember-truncate/button-toggle onClick=(action "toggleTruncate")}}
+    see more
+    {{/ember-truncate/button-toggle}}
   {{else}}
     {{text}}
+    {{#ember-truncate/button-toggle onClick=(action "toggleTruncate")}}
+      see less
+    {{/ember-truncate/button-toggle}}
   {{/if}}
-  <button class="truncate-multiline--button{{if _shouldShowSeeLessButton "" "-hidden"}}" {{action "toggleTruncate"}}>
-    {{#if _shouldSupportSeeLessButtonA11y}}
-      <span aria-hidden="true">{{seeLessButtonText}}</span>
-      <span class="truncate-multiline--visually-hidden">{{seeLessButtonA11yText}}</span>
-    {{else if _shouldShowSeeLessButton}}
-      {{seeLessButtonText}}
-    {{/if}}
-  </button>
 {{/if}}
