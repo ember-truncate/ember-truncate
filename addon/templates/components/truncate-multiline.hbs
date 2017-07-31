@@ -17,13 +17,19 @@
     {{#ember-truncate/truncation-target}}
     {{text}}
     {{/ember-truncate/truncation-target}}
-    {{#ember-truncate/button-toggle onClick=(action "toggleTruncate")}}
-    see more
-    {{/ember-truncate/button-toggle}}
+    {{! only show the "see more" button if the text has been truncated }}
+    {{#if isTruncated}}
+      {{#ember-truncate/button-toggle onClick=(action "toggleTruncate")}}
+      see more
+      {{/ember-truncate/button-toggle}}
+    {{/if}}
   {{else}}
     {{text}}
-    {{#ember-truncate/button-toggle onClick=(action "toggleTruncate")}}
-      see less
-    {{/ember-truncate/button-toggle}}
+    {{! only show the "see less" button if the text has been truncated }}
+    {{#if isTruncated}}
+      {{#ember-truncate/button-toggle onClick=(action "toggleTruncate")}}
+        see less
+      {{/ember-truncate/button-toggle}}
+    {{/if}}
   {{/if}}
 {{/if}}

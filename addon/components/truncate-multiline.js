@@ -3,6 +3,7 @@ import ResizeHandlerMixin from 'ember-singularity-mixins/mixins/resize-handler';
 import clamp from 'ember-truncate/utils/clamp';
 import layout from 'ember-truncate/templates/components/truncate-multiline';
 import diffAttrs from 'ember-diff-attrs';
+import RunMixin from 'ember-lifeline/mixins/run';
 
 const cssNamespace = 'truncate-multiline';
 
@@ -26,7 +27,7 @@ const cssNamespace = 'truncate-multiline';
  * @class SharedShowMoreTextMultilineComponent
  */
 
-export default Ember.Component.extend(ResizeHandlerMixin, {
+export default Ember.Component.extend(ResizeHandlerMixin, RunMixin, {
   layout: layout,
 
   /**
@@ -66,6 +67,7 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
    * Whether the text is being truncated or not. Passed to the yielded namespace as `isTruncated`.
    * @property truncationState
    * @type {Boolean}
+   * @readonly
    */
   truncationState: Ember.computed.readOnly('_truncate'),
 
@@ -73,6 +75,7 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
    * Whether the text needed truncating or was short enough already.
    * @property isTruncated
    * @type {Boolean}
+   * @readonly
    */
   isTruncated: Ember.computed.readOnly('_isTruncated'),
 
@@ -142,20 +145,26 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
    * @private
    */
   _doTruncation() {
-const doc = this.get('document');
+    const doc = this.get('document');
 
     const el = this.element.querySelector(`.${cssNamespace}--truncation-target`);
     // TODO: make the assertion message more descriptive
     Ember.assert('must use the `target` component from the yielded namespace', el instanceof HTMLElement);
-    const button = this.element.querySelector(`[class^=${cssNamespace}--button]`);
-    if (button != null) { button.parentNode.removeChild(button); }
+    const button = removeButton(this);
     clamp(el, this.get('lines'), (didTruncate) => this.set('_isTruncated', didTruncate), `${cssNamespace}--last-line`, doc);
     const ellipsizedSpan = el.lastChild;
     el.removeChild(ellipsizedSpan);
     const wrappingSpan = doc.createElement('span');
     wrappingSpan.classList.add(`${cssNamespace}--last-line-wrapper`);
     wrappingSpan.appendChild(ellipsizedSpan);
-    if (button != null) { wrappingSpan.appendChild(button); }
+    if (button != null) {
+      appendButton(wrappingSpan, button);
+    } else {
+      // the button may not be available until after a rerender
+      this.runTask(() => {
+        appendButton(wrappingSpan, removeButton(this));
+      }, 1);
+    }
     el.appendChild(wrappingSpan);
     this.set('_didTruncate', true);
   },
@@ -206,3 +215,13 @@ const doc = this.get('document');
     },
   },
 });
+
+function removeButton(context) {
+  const button = context.element.querySelector(`[class^=${cssNamespace}--button]`);
+  if (button != null) { button.parentNode.removeChild(button); }
+  return button;
+}
+
+function appendButton(wrapper, button) {
+  if (button != null) { wrapper.appendChild(button); }
+}
