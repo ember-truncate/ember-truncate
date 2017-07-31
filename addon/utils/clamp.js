@@ -10,16 +10,14 @@
  * @param {String} cssClass - A CSS class applied to the last line instead of inline CSS.
  */
 
-export default (function(win, doc) {
-  var measure, text, lineWidth, pos,
-    lineStart, lineCount, wordStart,
-    line, lineText, wasNewLine,
-    nodeStack, seedQueue, pendingQueue,
-    textNode, measureWidth, thisNode, nextQueue,
-    ce = doc.createElement.bind(doc),
-    ctn = doc.createTextNode.bind(doc);
+export default class Clamp {
 
-  function appendNodeAndQueueToElement(element, node, queue) {
+  // Pass in the document object on creation
+  constructor(doc) {
+    this.doc = doc;
+  }
+
+  appendNodeAndQueueToElement(element, node, queue, nodeStack) {
     var queueLength = queue && queue.length,
         i, aNode, bNode;
     // add nodes waiting to be finalized
@@ -45,34 +43,35 @@ export default (function(win, doc) {
     }
   } // function appendNodeAndQueueToElement
 
-  function cleanup() {
-    thisNode = null;
-    textNode = null;
-    measure = null;
-    line = null;
-  } // function cleanup
-
-  function createMeasureElement() {
+  createMeasureElement(el) {
     // measurement element is made a child of the clamped element to get it's style
-    measure = ce('span');
+    var measure = el;
     measure.style.position = 'absolute'; // prevent page reflow
     measure.style.whiteSpace = 'pre'; // cross-browser width results
     measure.style.visibility = 'hidden'; // prevent drawing
+    return measure;
   } // function createMeasureElement
 
-  return function clamp(el, lineClamp, cb, cssClass) {
+  clamp(el, lineClamp, cb, cssClass) {
     // make sure the element belongs to the document
-    if (!el.ownerDocument || el.ownerDocument !== doc) {
+    if (!el.ownerDocument || el.ownerDocument !== this.doc) {
       return;
     }
 
     // reset to safe starting values
-    lineCount = 1;
-    wasNewLine = false;
-    lineWidth = el.clientWidth;
-    nodeStack = [];
-    seedQueue = [];
-    pendingQueue = [];
+    var nodeStack = [];
+    var lineCount = 1;
+    var wasNewLine = false;
+    var lineWidth = el.clientWidth;
+    var seedQueue = [];
+    var pendingQueue = [];
+    var ce = this.doc.createElement.bind(this.doc);
+    var ctn = this.doc.createTextNode.bind(this.doc);
+    var textNode = null;
+    var thisNode = null;
+    var line = null;
+    var measure = null;
+    var anaqte = this.appendNodeAndQueueToElement;
 
     // get all nodes and remove them
     while (el.firstChild !== null) {
@@ -91,10 +90,13 @@ export default (function(win, doc) {
     }
 
     // add measurement element within so it inherits styles
-    createMeasureElement();
+    measure = this.createMeasureElement(ce('span'));
     el.appendChild(measure);
 
     function clampNodeRecurse(nodeQueue) {
+      var wordStart, pos, text, lineStart,
+          lineText, nextQueue, measureWidth;
+
       function nextWord() {
         // remember last word start position
         wordStart = pos + 1;
@@ -119,7 +121,7 @@ export default (function(win, doc) {
         // create a text node to measure
         textNode = ctn(text.substr(lineStart, pos - lineStart));
         // place relevant nodes into the measurement element
-        appendNodeAndQueueToElement(measure, textNode, pendingQueue);
+        anaqte(measure, textNode, pendingQueue, nodeStack);
         // take the measurement
         measureWidth = measure.clientWidth;
         // remove text node from node stack
@@ -144,7 +146,7 @@ export default (function(win, doc) {
           // create a line element
           line = ce('span');
           // add text to the line element
-          appendNodeAndQueueToElement(line, ctn(lineText), pendingQueue);
+          anaqte(line, ctn(lineText), pendingQueue, nodeStack);
           // add the line element to the container
           el.appendChild(line);
           // flush the queue
@@ -183,7 +185,7 @@ export default (function(win, doc) {
             // there is text that hasn't been appended
             if (nodeStack.length) {
               // add the text to the last node on the stack
-              appendNodeAndQueueToElement(null, ctn(text.substr(lineStart)));
+              anaqte(null, ctn(text.substr(lineStart)), null, nodeStack);
               // push the root from the node stack into the queue if it's not already
               if (pendingQueue.indexOf(nodeStack[0]) < 0) {
                 pendingQueue.push(nodeStack[0]);
@@ -249,7 +251,5 @@ export default (function(win, doc) {
 
     // call the callback with whether or not the text was truncated
     cb(lineCount > lineClamp);
-
-    cleanup();
-  }; // function clamp
-}(window, document));
+  } // function clamp
+}
