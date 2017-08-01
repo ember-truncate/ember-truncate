@@ -3,7 +3,6 @@ import ResizeHandlerMixin from 'ember-singularity-mixins/mixins/resize-handler';
 import clamp from 'ember-truncate/utils/clamp';
 import layout from 'ember-truncate/templates/components/truncate-multiline';
 import diffAttrs from 'ember-diff-attrs';
-import RunMixin from 'ember-lifeline/mixins/run';
 
 const cssNamespace = 'truncate-multiline';
 
@@ -27,7 +26,7 @@ const cssNamespace = 'truncate-multiline';
  * @class SharedShowMoreTextMultilineComponent
  */
 
-export default Ember.Component.extend(ResizeHandlerMixin, RunMixin, {
+export default Ember.Component.extend(ResizeHandlerMixin, {
   layout: layout,
 
   /**
@@ -61,7 +60,18 @@ export default Ember.Component.extend(ResizeHandlerMixin, RunMixin, {
    * @type {Boolean}
    * @private
    */
-  _truncate: true,
+  _truncate: Ember.computed({
+    get() { return this.__truncate; },
+    set(key, value) {
+      if (!value) {
+        this.set('_buttonDestination', null);
+      }
+
+      return this.__truncate = value;
+    },
+  }),
+
+  __truncate: true,
 
   /**
    * Whether the text is being truncated or not. Passed to the yielded namespace as `isTruncated`.
@@ -92,6 +102,14 @@ export default Ember.Component.extend(ResizeHandlerMixin, RunMixin, {
    * @private
    */
   _didTruncate: false,
+
+  _buttonId: Ember.computed('elementId', function() {
+    return `${cssNamespace}--${this.elementId}--button-destination`;
+  }),
+
+  _buttonDestination: null,
+
+  _buttonInPlace: Ember.computed.not('_buttonDestination'),
 
   /**
    * Resets the component when the `text` attribute of the component has changed
@@ -131,8 +149,10 @@ export default Ember.Component.extend(ResizeHandlerMixin, RunMixin, {
     const truncate = this.get('_truncate');
     if (truncate) {
       // trigger a rerender/retruncate
-      this.set('_didTruncate', false);
-      this.set('_truncate', false);
+      this.setProperties({
+        _didTruncate: false,
+        _truncate: false,
+      });
       Ember.run.scheduleOnce('afterRender', this, () => {
         this.set('_truncate', truncate);
       });
@@ -150,21 +170,13 @@ export default Ember.Component.extend(ResizeHandlerMixin, RunMixin, {
     const el = this.element.querySelector(`.${cssNamespace}--truncation-target`);
     // TODO: make the assertion message more descriptive
     Ember.assert('must use the `target` component from the yielded namespace', el instanceof HTMLElement);
-    const button = removeButton(this);
     clamp(el, this.get('lines'), (didTruncate) => this.set('_isTruncated', didTruncate), `${cssNamespace}--last-line`, doc);
     const ellipsizedSpan = el.lastChild;
     el.removeChild(ellipsizedSpan);
     const wrappingSpan = doc.createElement('span');
+    this.set('_buttonDestination', wrappingSpan.id = this.get('_buttonId'));
     wrappingSpan.classList.add(`${cssNamespace}--last-line-wrapper`);
     wrappingSpan.appendChild(ellipsizedSpan);
-    if (button != null) {
-      appendButton(wrappingSpan, button);
-    } else {
-      // the button may not be available until after a rerender
-      this.runTask(() => {
-        appendButton(wrappingSpan, removeButton(this));
-      }, 1);
-    }
     el.appendChild(wrappingSpan);
     this.set('_didTruncate', true);
   },
@@ -215,13 +227,3 @@ export default Ember.Component.extend(ResizeHandlerMixin, RunMixin, {
     },
   },
 });
-
-function removeButton(context) {
-  const button = context.element.querySelector(`[class^=${cssNamespace}--button]`);
-  if (button != null) { button.parentNode.removeChild(button); }
-  return button;
-}
-
-function appendButton(wrapper, button) {
-  if (button != null) { wrapper.appendChild(button); }
-}
