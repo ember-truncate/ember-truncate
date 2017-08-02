@@ -307,7 +307,7 @@ test('resizing triggers truncation recompute', function(assert) {
     );
 
     // change container sizing
-    this.$('#truncate-multiline--test-container')[0].style.width = '540px';
+    this.$('#truncate-multiline--test-container')[0].style.width = '800px';
 
     // trigger resize event
     window.dispatchEvent(new CustomEvent('resize'));
@@ -315,7 +315,7 @@ test('resizing triggers truncation recompute', function(assert) {
     return wait();
   }).then(() => {
     // verify container size changed
-    assert.equal(this.$('#truncate-multiline--test-container')[0].style.width, '540px', 'the container was resized');
+    assert.equal(this.$('#truncate-multiline--test-container')[0].style.width, '800px', 'the container was resized');
 
     const $truncationTarget = this.$('.truncate-multiline--truncation-target');
     const $truncationChunks = $truncationTarget.children();
