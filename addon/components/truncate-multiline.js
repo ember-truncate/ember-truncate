@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import ResizeHandlerMixin from 'ember-singularity-mixins/mixins/resize-handler';
-import Clamp from 'ember-truncate/utils/clamp';
+import clamp from 'ember-truncate/utils/clamp';
 import layout from 'ember-truncate/templates/components/truncate-multiline';
 import diffAttrs from 'ember-diff-attrs';
 
@@ -202,8 +202,7 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
     let el = this.element.querySelector(`.${cssNamespace}--truncation-target`);
     let button = this.element.querySelector(`[class^=${cssNamespace}--button]`);
     button.parentNode.removeChild(button);
-
-    new Clamp(doc).clamp(el, this.get('lines'), (didTruncate) => this.set('_isTruncated', didTruncate), `${cssNamespace}--last-line`);
+    clamp(el, this.get('lines'), (didTruncate) => this.set('_isTruncated', didTruncate), `${cssNamespace}--last-line`, doc);
     let ellipsizedSpan = el.lastChild;
     el.removeChild(ellipsizedSpan);
     let wrappingSpan = doc.createElement('span');
