@@ -1,4 +1,9 @@
 {
   "name": "ember-truncate",
-  "dependencies": {}
+  "dependencies": {
+    "ember": "components/ember#canary"
+  },
+  "resolutions": {
+    "ember": "canary"
+  }
 }

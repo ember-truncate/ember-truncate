@@ -10,7 +10,14 @@
  * @param {String} cssClass - A CSS class applied to the last line instead of inline CSS.
  */
 
-function appendNodeAndQueueToElement(element, node, queue, nodeStack) {
+var measure, text, lineWidth, pos,
+  lineStart, lineCount, wordStart,
+  line, lineText, wasNewLine,
+  nodeStack, seedQueue, pendingQueue,
+  textNode, measureWidth, thisNode, nextQueue,
+  ce, ctn;
+
+function appendNodeAndQueueToElement(element, node, queue) {
   var queueLength = queue && queue.length,
       i, aNode, bNode;
   // add nodes waiting to be finalized
@@ -36,13 +43,19 @@ function appendNodeAndQueueToElement(element, node, queue, nodeStack) {
   }
 } // function appendNodeAndQueueToElement
 
-function createMeasureElement(el) {
+function cleanup() {
+  thisNode = null;
+  textNode = null;
+  measure = null;
+  line = null;
+} // function cleanup
+
+function createMeasureElement() {
   // measurement element is made a child of the clamped element to get it's style
-  var measure = el;
+  measure = ce('span');
   measure.style.position = 'absolute'; // prevent page reflow
   measure.style.whiteSpace = 'pre'; // cross-browser width results
   measure.style.visibility = 'hidden'; // prevent drawing
-  return measure;
 } // function createMeasureElement
 
 export default function clamp(el, lineClamp, cb, cssClass, doc) {
@@ -51,19 +64,16 @@ export default function clamp(el, lineClamp, cb, cssClass, doc) {
     return;
   }
 
+  ce = doc.createElement.bind(doc);
+  ctn = doc.createTextNode.bind(doc);
+
   // reset to safe starting values
-  var nodeStack = [];
-  var lineCount = 1;
-  var wasNewLine = false;
-  var lineWidth = el.clientWidth;
-  var seedQueue = [];
-  var pendingQueue = [];
-  var ce = doc.createElement.bind(doc);
-  var ctn = doc.createTextNode.bind(doc);
-  var textNode = null;
-  var thisNode = null;
-  var line = null;
-  var measure = null;
+  lineCount = 1;
+  wasNewLine = false;
+  lineWidth = el.clientWidth;
+  nodeStack = [];
+  seedQueue = [];
+  pendingQueue = [];
 
   // get all nodes and remove them
   while (el.firstChild !== null) {
@@ -82,13 +92,10 @@ export default function clamp(el, lineClamp, cb, cssClass, doc) {
   }
 
   // add measurement element within so it inherits styles
-  measure = createMeasureElement(ce('span'));
+  createMeasureElement();
   el.appendChild(measure);
 
   function clampNodeRecurse(nodeQueue) {
-    var wordStart, pos, text, lineStart,
-        lineText, nextQueue, measureWidth;
-
     function nextWord() {
       // remember last word start position
       wordStart = pos + 1;
@@ -113,7 +120,7 @@ export default function clamp(el, lineClamp, cb, cssClass, doc) {
       // create a text node to measure
       textNode = ctn(text.substr(lineStart, pos - lineStart));
       // place relevant nodes into the measurement element
-      appendNodeAndQueueToElement(measure, textNode, pendingQueue, nodeStack);
+      appendNodeAndQueueToElement(measure, textNode, pendingQueue);
       // take the measurement
       measureWidth = measure.clientWidth;
       // remove text node from node stack
@@ -138,7 +145,7 @@ export default function clamp(el, lineClamp, cb, cssClass, doc) {
         // create a line element
         line = ce('span');
         // add text to the line element
-        appendNodeAndQueueToElement(line, ctn(lineText), pendingQueue, nodeStack);
+        appendNodeAndQueueToElement(line, ctn(lineText), pendingQueue);
         // add the line element to the container
         el.appendChild(line);
         // flush the queue
@@ -177,7 +184,7 @@ export default function clamp(el, lineClamp, cb, cssClass, doc) {
           // there is text that hasn't been appended
           if (nodeStack.length) {
             // add the text to the last node on the stack
-            appendNodeAndQueueToElement(null, ctn(text.substr(lineStart)), null, nodeStack);
+            appendNodeAndQueueToElement(null, ctn(text.substr(lineStart)));
             // push the root from the node stack into the queue if it's not already
             if (pendingQueue.indexOf(nodeStack[0]) < 0) {
               pendingQueue.push(nodeStack[0]);
@@ -243,4 +250,6 @@ export default function clamp(el, lineClamp, cb, cssClass, doc) {
 
   // call the callback with whether or not the text was truncated
   cb(lineCount > lineClamp);
+
+  cleanup();
 } // function clamp
