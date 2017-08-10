@@ -30,6 +30,12 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
   layout: layout,
 
   /**
+   * Document service uses the browser document object or falls back to
+   * a simple-dom implementation.
+   */
+  document: Ember.inject.service('-document'),
+
+  /**
    * The text to truncate. This is overridden if the block form is used.
    * @type {String}
    */
@@ -191,13 +197,15 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
    * @private
    */
   _doTruncation() {
+    const doc = this.get('document');
+
     let el = this.element.querySelector(`.${cssNamespace}--truncation-target`);
     let button = this.element.querySelector(`[class^=${cssNamespace}--button]`);
     button.parentNode.removeChild(button);
-    clamp(el, this.get('lines'), (didTruncate) => this.set('_isTruncated', didTruncate), `${cssNamespace}--last-line`);
+    clamp(el, this.get('lines'), (didTruncate) => this.set('_isTruncated', didTruncate), `${cssNamespace}--last-line`, doc);
     let ellipsizedSpan = el.lastChild;
     el.removeChild(ellipsizedSpan);
-    let wrappingSpan = document.createElement('span');
+    let wrappingSpan = doc.createElement('span');
     wrappingSpan.classList.add(`${cssNamespace}--last-line-wrapper`);
     wrappingSpan.appendChild(ellipsizedSpan);
     wrappingSpan.appendChild(button);
