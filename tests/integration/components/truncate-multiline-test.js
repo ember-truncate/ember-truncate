@@ -67,7 +67,6 @@ test('inline form works', function(assert) {
 });
 
 test('block form works', function(assert) {
-  // Template block usage:
   this.render(hbs`
     <div style="width: 362px; font: 16px sans-serif;">
       {{#truncate-multiline as |tm|}}
@@ -128,7 +127,6 @@ test('block form works', function(assert) {
 });
 
 test('block form with nested elements works', function(assert) {
-  // Template block usage:
   this.render(hbs`
     <div style="width: 362px; font: 16px sans-serif;">
       {{#truncate-multiline as |tm|}}
@@ -156,7 +154,6 @@ test('block form with nested elements works', function(assert) {
 });
 
 test('specifying a different number of lines works', function(assert) {
-  // Template block usage:
   this.render(hbs`
     <div style="width: 362px; font: 16px sans-serif;">
       {{truncate-multiline lines=2 text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
@@ -187,7 +184,6 @@ test('specifying a different number of lines works', function(assert) {
 });
 
 test('the button is hidden if the text isn\'t long enough to truncate', function(assert) {
-  // Template block usage:
   this.render(hbs`
     <div style="width: 362px; font: 16px sans-serif;">
       {{truncate-multiline text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
@@ -203,8 +199,7 @@ test('the button is hidden if the text isn\'t long enough to truncate', function
   });
 });
 
-test('clicking the button toggles full text', function(assert) {
-  // Template block usage:
+test('clicking the button toggles full text (inline)', function(assert) {
   const uuid = this.set('uuid', Ember.generateGuid());
   this.render(hbs`
     <div style="width: 362px; font: 16px sans-serif;">
@@ -241,11 +236,54 @@ test('clicking the button toggles full text', function(assert) {
   });
 });
 
+test('clicking the button toggles full text (block)', function(assert) {
+  const uuid = this.set('uuid', Ember.generateGuid());
+  this.render(hbs`
+    <div style="width: 362px; font: 16px sans-serif;">
+      {{#truncate-multiline id=uuid as |tm|}}
+        {{#tm.target}}
+          supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious
+        {{/tm.target}}
+        {{#tm.button}}
+          see more
+        {{/tm.button}}
+      {{/truncate-multiline}}
+    </div>
+  `);
+
+  return wait().then(() => {
+    assert.equal(
+      this.$('.truncate-multiline--truncation-target').children().length,
+      3,
+      'truncated before clicking button'
+    );
+
+    this.$('button').click();
+
+    return wait();
+  }).then(() => {
+    assert.equal(
+      this.$(`#${uuid}`)[0].firstChild.wholeText.trim(),
+      'supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious',
+      'not truncated after clicking button'
+    );
+
+    this.$('button').click();
+
+    return wait();
+  }).then(() => {
+    assert.equal(
+      this.$('.truncate-multiline--truncation-target').children().length,
+      3,
+      'truncated after clicking button again'
+    );
+  });
+});
+
 test('truncation can be controlled externally via the truncate attribute', function(assert) {
   // do truncate
   this.set('myTruncate', true);
 
-  // Template block usage:
   const uuid = this.set('uuid', Ember.generateGuid());
   this.render(hbs`
     <div style="width: 362px; font: 16px sans-serif;">
@@ -285,7 +323,6 @@ test('truncation can be controlled externally via the truncate attribute', funct
 });
 
 test('resizing triggers truncation recompute', function(assert) {
-  // Template block usage:
   this.render(hbs`
     <div id="truncate-multiline--test-container" style="width: 362px; font: 16px sans-serif;">
       {{truncate-multiline text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
@@ -340,7 +377,6 @@ test('clicking the see more/less button fires user defined actions', function(as
   this.on('assertOnCollapse', () => assert.ok(true, 'onCollapse action triggered'));
   this.on('pushOnToggleTruncate', (isTruncated) => args.push(isTruncated));
 
-  // Template block usage:
   this.render(hbs`
     <div id="truncate-multiline--test-container" style="width: 362px; font: 16px sans-serif;">
       {{truncate-multiline

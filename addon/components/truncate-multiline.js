@@ -103,10 +103,6 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
    */
   _didTruncate: false,
 
-  _buttonId: Ember.computed('elementId', function() {
-    return `${cssNamespace}--${this.elementId}--button-destination`;
-  }),
-
   _buttonDestination: null,
 
   _buttonInPlace: Ember.computed.not('_buttonDestination'),
@@ -174,9 +170,9 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
     const ellipsizedSpan = el.lastChild;
     el.removeChild(ellipsizedSpan);
     const wrappingSpan = doc.createElement('span');
-    this.set('_buttonDestination', wrappingSpan.id = this.get('_buttonId'));
     wrappingSpan.classList.add(`${cssNamespace}--last-line-wrapper`);
     wrappingSpan.appendChild(ellipsizedSpan);
+    this.set('_buttonDestination', wrappingSpan);
     el.appendChild(wrappingSpan);
     this.set('_didTruncate', true);
   },
