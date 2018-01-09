@@ -30,34 +30,34 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
   layout: layout,
 
   /**
-   * Document service uses the browser document object or falls back to
-   * a simple-dom implementation.
+   * Document service uses the browser document object or falls back to a simple-dom
+   * implementation.
    */
   document: Ember.inject.service('-document'),
 
   /**
    * The text to truncate. This is overridden if the block form is used.
-   * @type {String}
+   * @type {string}
    */
   text: '',
 
   /**
    * The number of lines at which to begin truncation.
-   * @type {Number}
+   * @type {number}
    * @default 3
    */
   lines: 3,
 
   /**
-   * Whether or not to truncate the text. Can be used to control truncation
-   * from outside of the component.
-   * @type {Boolean}
+   * Whether or not to truncate the text. Can be used to control truncation from outside of the
+   * component.
+   * @type {boolean}
    */
   truncate: true,
 
   /**
-   * Internal state of whether or not to truncate the text.
-   * @type {Boolean}
+   * Getter/setter for internal truncate state. Handles resetting the button destination.
+   * @type {boolean}
    * @private
    */
   _truncate: Ember.computed({
@@ -71,12 +71,17 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
     },
   }),
 
+  /**
+   * Internal state of whether or not to truncate the text.
+   * @type {boolean}
+   * @private
+   */
   __truncate: true,
 
   /**
-   * Whether the text is being truncated or not. Passed to the yielded namespace as `isTruncated`.
+   * Whether the text is being truncated or not. Passed to the block context as `isTruncated`.
    * @property truncationState
-   * @type {Boolean}
+   * @type {boolean}
    * @readonly
    */
   truncationState: Ember.computed.readOnly('_truncate'),
@@ -84,31 +89,42 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
   /**
    * Whether the text needed truncating or was short enough already.
    * @property isTruncated
-   * @type {Boolean}
+   * @type {boolean}
    * @readonly
    */
   isTruncated: Ember.computed.readOnly('_isTruncated'),
 
   /**
    * Internal state of whether or not the text needed truncating.
-   * @type {Boolean}
+   * @type {boolean}
    * @private
    */
   _isTruncated: false,
 
   /**
    * Keeps track of whether or not _doTruncate has been run.
-   * @type {Boolean}
+   * @type {boolean}
    * @private
    */
   _didTruncate: false,
 
+  /**
+   * The element into which the wormhole will render the truncation toggle button.
+   * @type {HTMLElement}
+   * @private
+   */
   _buttonDestination: null,
 
+  /**
+   * Whether the wormhole should render the button in place instead of moving it into the
+   * destination.
+   * @type {boolean}
+   * @private
+   */
   _buttonInPlace: Ember.computed.not('_buttonDestination'),
 
   /**
-   * Resets the component when the `text` attribute of the component has changed
+   * Resets the component when the `text` attribute of the component has changed.
    * @return {Void}
    */
   didReceiveAttrs: diffAttrs('lines', 'text', 'truncate', function(changedAttrs) {
@@ -137,7 +153,7 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
   },
 
   /**
-   * Resets the state of the component
+   * Resets the state of the component.
    * @return {Void}
    * @private
    */
@@ -188,7 +204,7 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
   /**
    * Returns false so truncation does not happen twice on insert.
    * @property resizeOnInsert
-   * @type {Boolean}
+   * @type {boolean}
    */
   resizeOnInsert: false,
 
@@ -216,9 +232,9 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
         }
       }
 
-      const onToggleTruncate = this.onToggleTruncate;
-      if (typeof onToggleTruncate === 'function') {
-        onToggleTruncate(!wasTruncated);
+      const onToggle = this.onToggle;
+      if (typeof onToggle === 'function') {
+        onToggle(!wasTruncated);
       }
     },
   },

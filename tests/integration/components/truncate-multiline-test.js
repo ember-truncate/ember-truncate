@@ -375,14 +375,14 @@ test('clicking the see more/less button fires user defined actions', function(as
 
   this.on('assertOnExpand', () => assert.ok(true, 'onExpand action triggered'));
   this.on('assertOnCollapse', () => assert.ok(true, 'onCollapse action triggered'));
-  this.on('pushOnToggleTruncate', (isTruncated) => args.push(isTruncated));
+  this.on('pushOnToggle', (isTruncated) => args.push(isTruncated));
 
   this.render(hbs`
     <div id="truncate-multiline--test-container" style="width: 362px; font: 16px sans-serif;">
       {{truncate-multiline
         onExpand=(action "assertOnExpand")
         onCollapse=(action "assertOnCollapse")
-        onToggleTruncate=(action "pushOnToggleTruncate")
+        onToggle=(action "pushOnToggle")
         text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
     </div>
   `);
@@ -394,7 +394,7 @@ test('clicking the see more/less button fires user defined actions', function(as
     this.$('button').click();
     return wait();
   }).then(() => {
-    assert.deepEqual(args, [false, true], 'onToggleTruncate action triggered (twice) with the expected arguments');
+    assert.deepEqual(args, [false, true], 'onToggle action triggered (twice) with the expected arguments');
   });
 });
 
