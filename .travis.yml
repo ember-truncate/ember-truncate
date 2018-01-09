@@ -1,7 +1,7 @@
 ---
 language: node_js
 node_js:
-  - "4"
+  - "6"
 
 sudo: false
 
@@ -12,8 +12,8 @@ cache:
 
 env:
   # we recommend testing LTS's and latest stable release (bonus points to beta/canary)
-  - EMBER_TRY_SCENARIO=ember-lts-2.8
   - EMBER_TRY_SCENARIO=ember-lts-2.12
+  - EMBER_TRY_SCENARIO=ember-lts-2.16
   - EMBER_TRY_SCENARIO=ember-release
   - EMBER_TRY_SCENARIO=ember-beta
   - EMBER_TRY_SCENARIO=ember-canary
@@ -21,6 +21,7 @@ env:
 matrix:
   fast_finish: true
   allow_failures:
+    - env: EMBER_TRY_SCENARIO=ember-beta
     - env: EMBER_TRY_SCENARIO=ember-canary
 
 before_install:
@@ -31,7 +32,6 @@ before_install:
 
 install:
   - npm install
-  - bower install
 
 script:
   # Usually, it's ok to finish the test scenario without reverting

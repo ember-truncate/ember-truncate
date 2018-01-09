@@ -1,0 +1,8 @@
+{{#ember-wormhole destinationElement=_destination renderInPlace=_inPlace}}
+  <button
+    class="truncate-multiline--button {{classNames}}"
+    onclick={{action DOMClick}}
+  >
+    {{yield}}
+  </button>
+{{/ember-wormhole}}
