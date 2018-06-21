@@ -146,6 +146,17 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
   _didTruncate: false,
 
   /**
+   * Deprecate the 0.x series.
+   * @return {Void}
+   */
+  init() {
+    Ember.deprecate(
+      "ember-truncate@0.x will no longer be supported. Please upgrade to the 1.x series for continued support.",
+      false
+    );
+  },
+
+  /**
    * Resets the component when the `text` attribute of the component has changed
    * @return {Void}
    */
