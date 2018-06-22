@@ -150,6 +150,7 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
    * @return {Void}
    */
   init() {
+    this._super(...arguments);
     Ember.deprecate(
       "ember-truncate@0.x will no longer be supported. Please upgrade to the 1.x series for continued support.",
       false
