@@ -1,4 +1,4 @@
-/*jshint node:true*/
+/* eslint-env node */
 module.exports = {
   "framework": "qunit",
   "test_page": "tests/index.html?hidepassed",
@@ -9,5 +9,15 @@ module.exports = {
   "launch_in_dev": [
     "PhantomJS",
     "Chrome"
-  ]
+  ],
+  browser_args: {
+    Chrome: [
+      '--headless',
+      '--disable-dev-shm-usage',
+      '--disable-gpu',
+      '--disable-software-rasterizer',
+      '--remote-debugging-port=0',
+      '--window-size=1440,900'
+    ]
+  },
 };

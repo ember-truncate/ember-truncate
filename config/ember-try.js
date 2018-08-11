@@ -1,9 +1,70 @@
-/*jshint node:true*/
-const supported = require('./scenarios-supported');
-const latest = require('./scenarios-latest');
-module.exports = {
-  scenarios: [
-    ...supported.scenarios,
-    ...latest.scenarios,
-  ],
+/* eslint-env node */
+
+const getChannelURL = require('ember-source-channel-url');
+
+module.exports = function() {
+  return Promise.all([
+    getChannelURL('release'),
+    getChannelURL('canary'),
+    getChannelURL('beta')
+  ]).then((urls) => {
+    return {
+      useYarn: false,
+      scenarios: [{
+        name: 'ember-lts-2.12',
+        npm: {
+          devDependencies: {
+            'ember-source': '2.12',
+          }
+        },
+      },
+      {
+        name: 'ember-lts-2.16',
+        npm: {
+          devDependencies: {
+            'ember-source': '~2.16.0',
+          }
+        },
+      },
+      {
+        name: 'ember-lts-2.18',
+        npm: {
+          devDependencies: {
+            'ember-source': '~2.18.0',
+          }
+        },
+      }, {
+        name: 'ember-lts-3.2',
+        npm: {
+          devDependencies: {
+            'ember-source': '~3.2.0',
+          }
+        },
+      }, {
+          name: 'ember-release',
+          npm: {
+            devDependencies: {
+              'ember-source': urls[0]
+            }
+          }
+        },
+        {
+          name: 'ember-canary',
+          npm: {
+            devDependencies: {
+              'ember-source': urls[1]
+            }
+          }
+        },
+        {
+          name: 'ember-beta',
+          npm: {
+            devDependencies: {
+              'ember-source': urls[2]
+            }
+          }
+        }
+      ]
+    };
+  });
 };

@@ -10,9 +10,11 @@
 
 # misc
 .DS_Store
+.node_modules.ember-try/*
 /.sass-cache
 /connect.lock
 /coverage/*
 /libpeerconnection.log
 npm-debug.log*
 testem.log
+package.json.ember-try
