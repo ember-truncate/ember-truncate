@@ -16,7 +16,7 @@
     "doc": "doc",
     "test": "tests"
   },
-  "repository": "https://github.com/nickiaconis/ember-truncate",
+  "repository": "https://github.com/ember-truncate/ember-truncate",
   "scripts": {
     "build": "ember build",
     "start": "ember server",
