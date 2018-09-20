@@ -5,7 +5,8 @@
 
 This addon provides a component for truncating text in an Ember application.
 
-## Installation
+Installation
+------------------------------------------------------------------------------
 
 * `npm install ember-truncate`
 
