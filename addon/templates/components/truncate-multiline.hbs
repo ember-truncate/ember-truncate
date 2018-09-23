@@ -6,7 +6,7 @@
         _destination=_buttonDestination
         _inPlace=_buttonInPlace
         onClick=(action "toggleTruncate"))
-      isTruncated=truncationState
+      isTruncated=isTruncated
     )}}
   {{else}}
     {{yield (hash
@@ -15,7 +15,7 @@
         _destination=_buttonDestination
         _inPlace=_buttonInPlace
         onClick=(action "toggleTruncate"))
-      isTruncated=truncationState
+      isTruncated=isTruncated
     )}}
   {{/if}}
 {{else}}
