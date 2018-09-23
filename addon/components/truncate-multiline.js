@@ -95,6 +95,14 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
   isTruncated: Ember.computed.readOnly('_isTruncated'),
 
   /**
+   * Whether the text needed truncating and is currently truncated.
+   * @property isCurrentlyTruncated
+   * @type {boolean}
+   * @readonly
+   */
+  isCurrentlyTruncated: Ember.computed.and('_isTruncated', '_truncate'),
+  
+  /**
    * Internal state of whether or not the text needed truncating.
    * @type {boolean}
    * @private
