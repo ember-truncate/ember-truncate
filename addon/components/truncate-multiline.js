@@ -101,7 +101,7 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
    * @readonly
    */
   isCurrentlyTruncated: Ember.computed('_isTruncated', '_truncate', function() {
-    return this.get('_isTruncated') && !this.get('_truncate');
+    return this.get('_isTruncated') && this.get('_truncate');
   }),
   
   /**
