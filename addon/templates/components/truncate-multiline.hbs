@@ -15,7 +15,7 @@
         _destination=_buttonDestination
         _inPlace=_buttonInPlace
         onClick=(action "toggleTruncate"))
-      isTruncated=(and isTruncated _truncate)
+      isTruncated=isCurrentlyTruncated
     )}}
   {{/if}}
 {{else}}
