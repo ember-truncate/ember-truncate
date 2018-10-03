@@ -1,7 +1,7 @@
-import Ember from 'ember';
+import Component from '@ember/component';
 import layout from 'ember-truncate/templates/just-yield';
 
-export default Ember.Component.extend({
+export default Component.extend({
   layout,
   classNames: [
     'truncate-multiline--truncation-target',
