@@ -9,7 +9,7 @@ module.exports = function() {
     getChannelURL('beta')
   ]).then((urls) => {
     return {
-      useYarn: false,
+      useYarn: true,
       scenarios: [{
         name: 'ember-lts-2.12',
         npm: {

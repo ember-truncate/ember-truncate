@@ -18,3 +18,4 @@
 npm-debug.log*
 testem.log
 package.json.ember-try
+/yarn-error.log
