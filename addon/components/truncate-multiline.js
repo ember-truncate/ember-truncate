@@ -1,8 +1,12 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { computed } from '@ember/object';
 import ResizeHandlerMixin from 'ember-singularity-mixins/mixins/resize-handler';
 import clamp from 'ember-truncate/utils/clamp';
 import layout from 'ember-truncate/templates/components/truncate-multiline';
 import diffAttrs from 'ember-diff-attrs';
+import { inject as service } from '@ember/service';
+import { scheduleOnce }  from '@ember/runloop';
+import { assert }  from '@ember/debug';
 
 const cssNamespace = 'truncate-multiline';
 
@@ -26,14 +30,14 @@ const cssNamespace = 'truncate-multiline';
  * @class SharedShowMoreTextMultilineComponent
  */
 
-export default Ember.Component.extend(ResizeHandlerMixin, {
+export default Component.extend(ResizeHandlerMixin, {
   layout: layout,
 
   /**
    * Document service uses the browser document object or falls back to a simple-dom
    * implementation.
    */
-  document: Ember.inject.service('-document'),
+  document: service('-document'),
 
   /**
    * The text to truncate. This is overridden if the block form is used.
@@ -60,7 +64,7 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
    * @type {boolean}
    * @private
    */
-  _truncate: Ember.computed({
+  _truncate: computed({
     get() { return this.__truncate; },
     set(key, value) {
       if (!value) {
@@ -84,7 +88,7 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
    * @type {boolean}
    * @readonly
    */
-  truncationState: Ember.computed.readOnly('_truncate'),
+  truncationState: computed.readOnly('_truncate'),
 
   /**
    * Whether the text needed truncating or was short enough already.
@@ -92,7 +96,7 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
    * @type {boolean}
    * @readonly
    */
-  isTruncated: Ember.computed.readOnly('_isTruncated'),
+  isTruncated: computed.readOnly('_isTruncated'),
 
   /**
    * Internal state of whether or not the text needed truncating.
@@ -121,7 +125,7 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
    * @type {boolean}
    * @private
    */
-  _buttonInPlace: Ember.computed.not('_buttonDestination'),
+  _buttonInPlace: computed.not('_buttonDestination'),
 
   /**
    * Resets the component when the `text` attribute of the component has changed.
@@ -148,7 +152,7 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
   didRender() {
     this._super(...arguments);
     if (!this.get('_didTruncate') && this.get('_truncate')) {
-      Ember.run.scheduleOnce('afterRender', this, this._doTruncation);
+      scheduleOnce('afterRender', this, this._doTruncation);
     }
   },
 
@@ -165,7 +169,7 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
         _didTruncate: false,
         _truncate: false,
       });
-      Ember.run.scheduleOnce('afterRender', this, () => {
+      scheduleOnce('afterRender', this, () => {
         this.set('_truncate', truncate);
       });
     }
@@ -181,7 +185,7 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
 
     const el = this.element.querySelector(`.${cssNamespace}--truncation-target`);
     // TODO: make the assertion message more descriptive
-    Ember.assert('must use the `target` component from the yielded namespace', el instanceof HTMLElement);
+    assert('must use the `target` component from the yielded namespace', el instanceof HTMLElement);
     clamp(el, this.get('lines'), (didTruncate) => this.set('_isTruncated', didTruncate), `${cssNamespace}--last-line`, doc);
     const ellipsizedSpan = el.lastChild;
     el.removeChild(ellipsizedSpan);
