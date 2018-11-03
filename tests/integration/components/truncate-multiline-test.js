@@ -183,7 +183,7 @@ test('specifying a different number of lines works', function(assert) {
   });
 });
 
-test('the button is hidden if the text isn\'t long enough to truncate', function(assert) {
+test('inline form without enough text to truncate works', function(assert) {
   this.render(hbs`
     <div style="width: 362px; font: 16px sans-serif;">
       {{truncate-multiline text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
@@ -191,10 +191,18 @@ test('the button is hidden if the text isn\'t long enough to truncate', function
   `);
 
   return wait().then(() => {
+    const $truncationTarget = this.$('.truncate-multiline--truncation-target');
+    const $truncationChunks = $truncationTarget.children();
+    const $lastChunkWrapper = $truncationChunks.slice(-1);
+
     assert.equal(
       this.$('truncate-multiline--button').length,
       0,
-      'the button is not rendered'
+      'the button is hidden if the text isn\'t long enough to truncate'
+    );
+    assert.notOk(
+      $lastChunkWrapper.hasClass('truncate-multiline--last-line-wrapper'),
+      'last chunk is not wrapped if truncation was not needed'
     );
   });
 });

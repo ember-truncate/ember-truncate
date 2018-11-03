@@ -58,7 +58,7 @@ function createMeasureElement() {
   measure.style.visibility = 'hidden'; // prevent drawing
 } // function createMeasureElement
 
-export default function clamp(el, lineClamp, cb, cssClass, doc) {
+export default function clamp(el, lineClamp, cssClass, doc, cb) {
   // make sure the element belongs to the document
   if (!el.ownerDocument || el.ownerDocument !== doc) {
     return;
