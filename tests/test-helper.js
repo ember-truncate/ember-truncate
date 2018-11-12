@@ -1,8 +1,8 @@
-import resolver from './helpers/resolver';
-import {
-  setResolver
-} from 'ember-qunit';
-import registerPolyfills from './helpers/polyfills/register';
+import { setApplication } from '@ember/test-helpers';
+import { start } from 'ember-qunit';
+import Application from '../app';
+import config from '../config/environment';
 
-registerPolyfills();
-setResolver(resolver);
+setApplication(Application.create(config.APP));
+
+start();
