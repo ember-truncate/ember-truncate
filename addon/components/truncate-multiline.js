@@ -124,7 +124,23 @@ export default Ember.Component.extend(ResizeHandlerMixin, {
   _buttonInPlace: Ember.computed.not('_buttonDestination'),
 
   /**
-   * Resets the component when the `text` attribute of the component has changed.
+   * Deprecate the 0.x series.
+   * @return {Void}
+   */
+  init() {
+    this._super(...arguments);
+    Ember.deprecate(
+      "ember-truncate@0.x will no longer be supported. Please upgrade to the 1.x series for continued support.",
+      false,
+      {
+        id: 'ember-truncate-0.3-eol',
+        until: '0.3.5',
+      }
+    );
+  },
+
+  /**
+   * Resets the component when the `text` attribute of the component has changed
    * @return {Void}
    */
   didReceiveAttrs: diffAttrs('lines', 'text', 'truncate', function(changedAttrs) {
