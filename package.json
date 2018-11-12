@@ -1,6 +1,6 @@
 {
   "name": "ember-truncate",
-  "version": "0.3.5",
+  "version": "1.0.1",
   "description": "A generic component used to truncate text to a specified number of lines.",
   "keywords": [
     "ember-addon",
