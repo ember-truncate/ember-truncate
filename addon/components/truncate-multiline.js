@@ -1,12 +1,13 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
+import { deprecate } from '@ember/application/deprecations';
 import ResizeHandlerMixin from 'ember-singularity-mixins/mixins/resize-handler';
 import clamp from 'ember-truncate/utils/clamp';
 import layout from 'ember-truncate/templates/components/truncate-multiline';
 import diffAttrs from 'ember-diff-attrs';
 import { inject as service } from '@ember/service';
-import { scheduleOnce }  from '@ember/runloop';
-import { assert }  from '@ember/debug';
+import { scheduleOnce } from '@ember/runloop';
+import { assert } from '@ember/debug';
 
 const cssNamespace = 'truncate-multiline';
 
@@ -65,13 +66,15 @@ export default Component.extend(ResizeHandlerMixin, {
    * @private
    */
   _truncate: computed({
-    get() { return this.__truncate; },
+    get() {
+      return this.__truncate;
+    },
     set(key, value) {
       if (!value) {
         this.set('_buttonDestination', null);
       }
 
-      return this.__truncate = value;
+      return (this.__truncate = value);
     },
   }),
 
@@ -133,8 +136,8 @@ export default Component.extend(ResizeHandlerMixin, {
    */
   init() {
     this._super(...arguments);
-    Ember.deprecate(
-      "ember-truncate@0.x will no longer be supported. Please upgrade to the 1.x series for continued support.",
+    deprecate(
+      'ember-truncate@0.x will no longer be supported. Please upgrade to the 1.x series for continued support.',
       false,
       {
         id: 'ember-truncate-0.3-eol',
@@ -147,16 +150,24 @@ export default Component.extend(ResizeHandlerMixin, {
    * Resets the component when the `text` attribute of the component has changed
    * @return {Void}
    */
-  didReceiveAttrs: diffAttrs('lines', 'text', 'truncate', function(changedAttrs) {
+  didReceiveAttrs: diffAttrs('lines', 'text', 'truncate', function(
+    changedAttrs
+  ) {
     // `changedAttrs` will be null for the first invocation
     // short circuiting for this case makes `didReceiveAttrs` act like `didUpdateAttrs`
-    if (changedAttrs == null) { return; }
+    if (changedAttrs == null) {
+      return;
+    }
 
     if ('truncate' in changedAttrs) {
       this.set('_truncate', this.get('truncate'));
     }
 
-    if ('text' in changedAttrs || 'truncate' in changedAttrs || 'lines' in changedAttrs) {
+    if (
+      'text' in changedAttrs ||
+      'truncate' in changedAttrs ||
+      'lines' in changedAttrs
+    ) {
       this._resetState();
     }
   }),
@@ -199,10 +210,21 @@ export default Component.extend(ResizeHandlerMixin, {
   _doTruncation() {
     const doc = this.get('document');
 
-    const el = this.element.querySelector(`.${cssNamespace}--truncation-target`);
+    const el = this.element.querySelector(
+      `.${cssNamespace}--truncation-target`
+    );
     // TODO: make the assertion message more descriptive
-    assert('must use the `target` component from the yielded namespace', el instanceof HTMLElement);
-    clamp(el, this.get('lines'), (didTruncate) => this.set('_isTruncated', didTruncate), `${cssNamespace}--last-line`, doc);
+    assert(
+      'must use the `target` component from the yielded namespace',
+      el instanceof HTMLElement
+    );
+    clamp(
+      el,
+      this.get('lines'),
+      didTruncate => this.set('_isTruncated', didTruncate),
+      `${cssNamespace}--last-line`,
+      doc
+    );
     const ellipsizedSpan = el.lastChild;
     el.removeChild(ellipsizedSpan);
     const wrappingSpan = doc.createElement('span');
