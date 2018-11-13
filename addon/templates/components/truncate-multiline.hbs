@@ -1,33 +1,41 @@
 {{#if hasBlock}}
   {{#if _truncate}}
-    {{yield (hash
-      target=(component "ember-truncate/truncation-target")
-      button=(component "ember-truncate/button-toggle"
-        _destination=_buttonDestination
-        _inPlace=_buttonInPlace
-        onClick=(action "toggleTruncate"))
-      isTruncated=truncationState
-      neededTruncating=isTruncated
-    )}}
+    {{yield
+      (hash
+        target=(component "ember-truncate/truncation-target")
+        button=(component "ember-truncate/button-toggle"
+          _destination=_buttonDestination
+          _inPlace=_buttonInPlace
+          onClick=(action "toggleTruncate"))
+        isTruncated=truncationState
+        neededTruncating=isTruncated
+      )
+    }}
   {{else}}
-    {{yield (hash
-      target=(component "ember-truncate/truncation-noop")
-      button=(component "ember-truncate/button-toggle"
-        _destination=_buttonDestination
-        _inPlace=_buttonInPlace
-        onClick=(action "toggleTruncate"))
-      isTruncated=truncationState
-      neededTruncating=isTruncated
-    )}}
+    {{yield
+      (hash
+        target=(component "ember-truncate/truncation-noop")
+        button=(component "ember-truncate/button-toggle"
+          _destination=_buttonDestination
+          _inPlace=_buttonInPlace
+          onClick=(action "toggleTruncate"))
+        isTruncated=truncationState
+        neededTruncating=isTruncated
+      )
+    }}
   {{/if}}
 {{else}}
   {{#if _truncate}}
     {{#ember-truncate/truncation-target}}
-    {{text}}
+      {{text}}
     {{/ember-truncate/truncation-target}}
     {{! only show the "see more" button if the text has been truncated }}
     {{#if isTruncated}}
-      {{#ember-truncate/button-toggle _destination=_buttonDestination _inPlace=_buttonInPlace onClick=(action "toggleTruncate")}}
+      {{#ember-truncate/button-toggle
+        _destination=_buttonDestination
+        _inPlace=_buttonInPlace
+        onClick=(action "toggleTruncate")
+      }}
         see more
       {{/ember-truncate/button-toggle}}
     {{/if}}
@@ -35,7 +43,10 @@
     {{text}}
     {{! only show the "see less" button if the text has been truncated }}
     {{#if isTruncated}}
-      {{#ember-truncate/button-toggle _inPlace=true onClick=(action "toggleTruncate")}}
+      {{#ember-truncate/button-toggle
+        _inPlace=true
+        onClick=(action "toggleTruncate")
+      }}
         see less
       {{/ember-truncate/button-toggle}}
     {{/if}}
