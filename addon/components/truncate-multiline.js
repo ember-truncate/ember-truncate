@@ -1,6 +1,5 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
-import { deprecate } from '@ember/application/deprecations';
 import ResizeHandlerMixin from 'ember-singularity-mixins/mixins/resize-handler';
 import clamp from 'ember-truncate/utils/clamp';
 import layout from 'ember-truncate/templates/components/truncate-multiline';
@@ -129,22 +128,6 @@ export default Component.extend(ResizeHandlerMixin, {
    * @private
    */
   _buttonInPlace: computed.not('_buttonDestination'),
-
-  /**
-   * Deprecate the 0.x series.
-   * @return {Void}
-   */
-  init() {
-    this._super(...arguments);
-    deprecate(
-      'ember-truncate@0.x will no longer be supported. Please upgrade to the 1.x series for continued support.',
-      false,
-      {
-        id: 'ember-truncate-0.3-eol',
-        until: '0.3.5',
-      }
-    );
-  },
 
   /**
    * Resets the component when the `text` attribute of the component has changed
