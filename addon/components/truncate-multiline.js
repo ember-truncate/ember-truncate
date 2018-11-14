@@ -87,26 +87,26 @@ export default Component.extend(ResizeHandlerMixin, {
 
   /**
    * Whether the text is being truncated or not. Passed to the block context as `isTruncated`.
-   * @property truncationState
-   * @type {boolean}
-   * @readonly
-   */
-  truncationState: computed.readOnly('_truncate'),
-
-  /**
-   * Whether the text needed truncating or was short enough already.
    * @property isTruncated
    * @type {boolean}
    * @readonly
    */
-  isTruncated: computed.readOnly('_isTruncated'),
+  isTruncated: computed.readOnly('_truncate'),
+
+  /**
+   * Whether the text needed truncating or was short enough already.
+   * @property neededTruncating
+   * @type {boolean}
+   * @readonly
+   */
+  neededTruncating: computed.readOnly('_neededTruncating'),
 
   /**
    * Internal state of whether or not the text needed truncating.
    * @type {boolean}
    * @private
    */
-  _isTruncated: false,
+  _neededTruncating: false,
 
   /**
    * Keeps track of whether or not _doTruncate has been run.
@@ -221,7 +221,7 @@ export default Component.extend(ResizeHandlerMixin, {
     clamp(
       el,
       this.get('lines'),
-      didTruncate => this.set('_isTruncated', didTruncate),
+      didTruncate => this.set('_neededTruncating', didTruncate),
       `${cssNamespace}--last-line`,
       doc
     );
