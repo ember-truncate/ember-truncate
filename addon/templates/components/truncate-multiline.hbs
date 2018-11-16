@@ -7,7 +7,8 @@
           _destination=_buttonDestination
           _inPlace=_buttonInPlace
           onClick=(action "toggleTruncate"))
-        isTruncated=truncationState
+        isTruncated=isTruncated
+        neededTruncating=neededTruncating
       )
     }}
   {{else}}
@@ -18,7 +19,8 @@
           _destination=_buttonDestination
           _inPlace=_buttonInPlace
           onClick=(action "toggleTruncate"))
-        isTruncated=truncationState
+        isTruncated=isTruncated
+        neededTruncating=neededTruncating
       )
     }}
   {{/if}}
@@ -28,7 +30,7 @@
       {{text}}
     {{/ember-truncate/truncation-target}}
     {{! only show the "see more" button if the text has been truncated }}
-    {{#if isTruncated}}
+    {{#if neededTruncating}}
       {{#ember-truncate/button-toggle
         _destination=_buttonDestination
         _inPlace=_buttonInPlace
@@ -40,7 +42,7 @@
   {{else}}
     {{text}}
     {{! only show the "see less" button if the text has been truncated }}
-    {{#if isTruncated}}
+    {{#if neededTruncating}}
       {{#ember-truncate/button-toggle
         _inPlace=true
         onClick=(action "toggleTruncate")
