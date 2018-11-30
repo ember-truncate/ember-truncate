@@ -200,7 +200,7 @@ module('Integration | Component | truncate-multiline', function(hooks) {
   });
 
   test('inline form without enough text to truncate works', async function(assert) {
-    await this.render(hbs`
+    await render(hbs`
       <div style="width: 362px; font: 16px sans-serif;">
         {{truncate-multiline text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
       </div>
