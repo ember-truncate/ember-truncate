@@ -24,7 +24,9 @@ The block form offers customization beyond that of the inline form and support f
   {{#tm.target~}}
     Long text to truncate with <em><strong>really</strong> important</em> formatting.
   {{~/tm.target}}
-  {{#tm.button}}{{if tm.isTruncated "more" "less"}}{{/tm.button}}
+  {{#if tm.neededTruncating}}
+    {{#tm.button}}{{if tm.isTruncated "more" "less"}}{{/tm.button}}
+  {{/if}}
 {{~/truncate-multiline}}
 ```
 

@@ -1,307 +1,309 @@
-/* global CustomEvent */
-
 import Ember from 'ember';
-import { moduleForComponent, test } from 'ember-qunit';
+import { htmlSafe } from '@ember/template';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render, click, find, triggerEvent } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
-import wait from 'ember-test-helpers/wait';
 
-moduleForComponent('truncate-multiline', 'Integration | Component | truncate-multiline', {
-  beforeEach() {
+module('Integration | Component | truncate-multiline', function(hooks) {
+  setupRenderingTest(hooks);
+
+  hooks.beforeEach(function() {
+    this.actions = {};
+    this.send = (actionName, ...args) =>
+      this.actions[actionName].apply(this, args);
+
     // reset zoom on testing container to fix discrepancy in chrome
-    document.querySelector('#ember-testing-container #ember-testing').style.zoom = 1;
-  },
-  afterEach() {
+    document.querySelector(
+      '#ember-testing-container #ember-testing'
+    ).style.zoom = 1;
+  });
+
+  hooks.afterEach(function() {
     // undo zoom reset
-    document.querySelector('#ember-testing-container #ember-testing').style.zoom = null;
-  },
-  integration: true
-});
+    document.querySelector(
+      '#ember-testing-container #ember-testing'
+    ).style.zoom = null;
+  });
 
-test('inline form works', function(assert) {
-  this.render(hbs`<div style="width: 362px; font: 16px sans-serif;">{{truncate-multiline text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}</div>`);
-
-  return wait().then(() => {
-    const $truncationTarget = this.$('.truncate-multiline--truncation-target');
-    const $truncationChunks = $truncationTarget.children();
-    const $lastChunkWrapper = $truncationChunks.slice(-1);
-    const $lastChunkEtc = $lastChunkWrapper.children();
-    assert.ok(
-      $truncationTarget,
-      'the truncation target exists'
+  test('inline form works', async function(assert) {
+    await render(
+      hbs`
+      <div style="width: 362px; font: 16px sans-serif;">
+        {{truncate-multiline
+          text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"
+        }}
+      </div>`
     );
+
+    const truncationTarget = find('.truncate-multiline--truncation-target');
+    const truncationChunks = truncationTarget.children;
+    const lastChunkWrapper = [...truncationChunks].slice(-1);
+    const lastChunkEtc = lastChunkWrapper[0].children;
+    assert.ok(truncationTarget, 'the truncation target exists');
     assert.equal(
-      $truncationChunks.length,
+      truncationChunks.length,
       3,
       'text is truncated into chunks (default 3)'
     );
     assert.ok(
-      $truncationChunks.slice(0, 2)
-        .toArray()
-        .every((chunk) => chunk.innerText.trim() === 'supercalifragilisticexpialidocious'),
+      [...truncationChunks]
+        .slice(0, 2)
+        .every(
+          chunk =>
+            chunk.innerText.trim() === 'supercalifragilisticexpialidocious'
+        ),
       'first chunks contain expected text'
     );
-    assert.ok(
-      $lastChunkWrapper.hasClass('truncate-multiline--last-line-wrapper'),
-      'last-line-wrapper class is applied to last chunk wrapper'
-    );
+    assert
+      .dom(lastChunkWrapper[0])
+      .hasClass(
+        'truncate-multiline--last-line-wrapper',
+        'last-line-wrapper class is applied to last chunk wrapper'
+      );
     assert.equal(
-      $lastChunkEtc.length,
+      lastChunkEtc.length,
       2,
       'last chunk wrapper contains two elements'
     );
-    assert.ok(
-      $lastChunkEtc[0].classList.contains('truncate-multiline--last-line'),
-      'first element in last chunk wrapper is the last chunk'
-    );
+    assert
+      .dom(lastChunkEtc[0])
+      .hasClass(
+        'truncate-multiline--last-line',
+        'first element in last chunk wrapper is the last chunk'
+      );
     assert.equal(
-      $lastChunkEtc[0].innerText,
+      lastChunkEtc[0].innerText,
       'supercalifragilisticexpialidocious supercalifragilisticexpialidocious',
       'last chunk contains expected text'
     );
     assert.ok(
-      $lastChunkEtc[1].tagName.toLowerCase() === 'button' &&
-      $lastChunkEtc[1].classList.contains('truncate-multiline--button'),
+      lastChunkEtc[1].tagName.toLowerCase() === 'button' &&
+        lastChunkEtc[1].classList.contains('truncate-multiline--button'),
       'second element in last chunk wrapper is the expand button'
     );
   });
-});
 
-test('block form works', function(assert) {
-  this.render(hbs`
-    <div style="width: 362px; font: 16px sans-serif;">
-      {{#truncate-multiline as |tm|}}
-        {{#tm.target}}
-          supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious
-        {{/tm.target}}
-        {{#tm.button}}
-          see more
-        {{/tm.button}}
-      {{/truncate-multiline}}
-    </div>
-  `);
+  test('block form works', async function(assert) {
+    await render(hbs`
+      <div style="width: 362px; font: 16px sans-serif;">
+        {{#truncate-multiline as |tm|}}
+          {{#tm.target}}
+            supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious
+          {{/tm.target}}
+          {{#tm.button}}
+            see more
+          {{/tm.button}}
+        {{/truncate-multiline}}
+      </div>
+    `);
 
-  return wait().then(() => {
-    const $truncationTarget = this.$('.truncate-multiline--truncation-target');
-    const $truncationChunks = $truncationTarget.children();
-    const $lastChunkWrapper = $truncationChunks.slice(-1);
-    const $lastChunkEtc = $lastChunkWrapper.children();
-    assert.ok(
-      $truncationTarget,
-      'the truncation target exists'
-    );
+    const truncationTarget = find('.truncate-multiline--truncation-target');
+    const truncationChunks = truncationTarget.children;
+    const lastChunkWrapper = [...truncationChunks].slice(-1);
+    const lastChunkEtc = lastChunkWrapper[0].children;
+    assert.ok(truncationTarget, 'the truncation target exists');
     assert.equal(
-      $truncationChunks.length,
+      truncationChunks.length,
       3,
       'text is truncated into chunks (default 3)'
     );
     assert.ok(
-      $truncationChunks.slice(0, 2)
-        .toArray()
-        .every((chunk) => chunk.innerText.trim() === 'supercalifragilisticexpialidocious'),
+      [...truncationChunks]
+        .slice(0, 2)
+        .every(
+          chunk =>
+            chunk.innerText.trim() === 'supercalifragilisticexpialidocious'
+        ),
       'first chunks contain expected text'
     );
-    assert.ok(
-      $lastChunkWrapper.hasClass('truncate-multiline--last-line-wrapper'),
-      'last-line-wrapper class is applied to last chunk wrapper'
-    );
+    assert
+      .dom(lastChunkWrapper[0])
+      .hasClass(
+        'truncate-multiline--last-line-wrapper',
+        'last-line-wrapper class is applied to last chunk wrapper'
+      );
     assert.equal(
-      $lastChunkEtc.length,
+      lastChunkEtc.length,
       2,
       'last chunk wrapper contains two elements'
     );
-    assert.ok(
-      $lastChunkEtc[0].classList.contains('truncate-multiline--last-line'),
-      'first element in last chunk wrapper is the last chunk'
-    );
+    assert
+      .dom(lastChunkEtc[0])
+      .hasClass(
+        'truncate-multiline--last-line',
+        'first element in last chunk wrapper is the last chunk'
+      );
     assert.equal(
-      $lastChunkEtc[0].innerText,
+      lastChunkEtc[0].innerText,
       'supercalifragilisticexpialidocious supercalifragilisticexpialidocious',
       'last chunk contains expected text'
     );
     assert.ok(
-      $lastChunkEtc[1].tagName.toLowerCase() === 'button' &&
-      $lastChunkEtc[1].classList.contains('truncate-multiline--button'),
+      lastChunkEtc[1].tagName.toLowerCase() === 'button' &&
+        lastChunkEtc[1].classList.contains('truncate-multiline--button'),
       'second element in last chunk wrapper is the expand button'
     );
   });
-});
 
-test('block form with nested elements works', function(assert) {
-  this.render(hbs`
-    <div style="width: 362px; font: 16px sans-serif;">
-      {{#truncate-multiline as |tm|}}
-        {{#tm.target}}
-          <b><i>supercalifragilisticexpialidocious supercalifragilisticexpialidocious</i></b> <i>a <b>e</b> i</i> supercalifragilisticexpialidocious supercalifragilisticexpialidocious
-        {{/tm.target}}
-      {{/truncate-multiline}}
-    </div>
-  `);
+  test('block form with nested elements works', async function(assert) {
+    await render(hbs`
+      <div style="width: 362px; font: 16px sans-serif;">
+        {{#truncate-multiline as |tm|}}
+          {{#tm.target}}
+            <b><i>supercalifragilisticexpialidocious supercalifragilisticexpialidocious</i></b> <i>a <b>e</b> i</i> supercalifragilisticexpialidocious supercalifragilisticexpialidocious
+          {{/tm.target}}
+        {{/truncate-multiline}}
+      </div>
+    `);
 
-  return wait().then(() => {
-    const $truncationTarget = this.$('.truncate-multiline--truncation-target');
-    const $truncationChunks = $truncationTarget.children();
+    const truncationTarget = find('.truncate-multiline--truncation-target');
+    const truncationChunks = truncationTarget.children;
     assert.equal(
-      $truncationChunks[0].innerHTML.trim(),
+      truncationChunks[0].innerHTML.trim(),
       '<b><i>supercalifragilisticexpialidocious </i></b>',
       'first chunk contains expected html'
     );
     assert.equal(
-      $truncationChunks[1].innerHTML.trim(),
+      truncationChunks[1].innerHTML.trim(),
       '<b><i>supercalifragilisticexpialidocious</i></b> <i>a <b>e</b> i</i>',
       'second chunk contains expected html'
     );
   });
-});
 
-test('specifying a different number of lines works', function(assert) {
-  this.render(hbs`
-    <div style="width: 362px; font: 16px sans-serif;">
-      {{truncate-multiline lines=2 text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
-    </div>
-  `);
+  test('specifying a different number of lines works', async function(assert) {
+    await render(hbs`
+      <div style="width: 362px; font: 16px sans-serif;">
+        {{truncate-multiline lines=2 text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
+      </div>
+    `);
 
-  return wait().then(() => {
-    const $truncationTarget = this.$('.truncate-multiline--truncation-target');
-    const $truncationChunks = $truncationTarget.children();
-    const $lastChunkWrapper = $truncationChunks.slice(-1);
-    const $lastChunkEtc = $lastChunkWrapper.children();
+    const truncationTarget = find('.truncate-multiline--truncation-target');
+    const truncationChunks = truncationTarget.children;
+    const lastChunkWrapper = [...truncationChunks].slice(-1);
+    const lastChunkEtc = lastChunkWrapper[0].children;
     assert.equal(
-      $truncationChunks.length,
+      truncationChunks.length,
       2,
       'text is truncated into specified number of chunks'
     );
     assert.equal(
-      $truncationChunks[0].innerText,
+      truncationChunks[0].innerText,
       'supercalifragilisticexpialidocious',
       'first chunk contains expected text'
     );
     assert.equal(
-      $lastChunkEtc[0].innerText,
+      lastChunkEtc[0].innerText,
       'supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious',
       'last chunk contains expected text'
     );
   });
-});
 
-test('inline form without enough text to truncate works', function(assert) {
-  this.render(hbs`
-    <div style="width: 362px; font: 16px sans-serif;">
-      {{truncate-multiline text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
-    </div>
-  `);
+  test('inline form without enough text to truncate works', async function(assert) {
+    await this.render(hbs`
+      <div style="width: 362px; font: 16px sans-serif;">
+        {{truncate-multiline text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
+      </div>
+    `);
 
-  return wait().then(() => {
-    const $truncationTarget = this.$('.truncate-multiline--truncation-target');
-    const $truncationChunks = $truncationTarget.children();
-    const $lastChunkWrapper = $truncationChunks.slice(-1);
+    const truncationTarget = find('.truncate-multiline--truncation-target');
+    const truncationChunks = truncationTarget.children;
+    const lastChunkWrapper = [...truncationChunks].slice(-1);
 
-    assert.equal(
-      this.$('truncate-multiline--button').length,
-      0,
-      'the button is hidden if the text isn\'t long enough to truncate'
-    );
-    assert.notOk(
-      $lastChunkWrapper.hasClass('truncate-multiline--last-line-wrapper'),
-      'last chunk is not wrapped if truncation was not needed'
-    );
+    assert
+      .dom('truncate-multiline--button')
+      .doesNotExist('the button is not rendered');
+
+    assert
+      .dom(lastChunkWrapper[0])
+      .doesNotHaveClass(
+        'truncate-multiline--last-line-wrapper',
+        'last chunk is not wrapped if truncation was not needed'
+      );
   });
-});
 
-test('clicking the button toggles full text (inline)', function(assert) {
-  const uuid = this.set('uuid', Ember.generateGuid());
-  this.render(hbs`
-    <div style="width: 362px; font: 16px sans-serif;">
-      {{truncate-multiline id=uuid text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
-    </div>
-  `);
+  test('clicking the button toggles full text (inline)', async function(assert) {
+    const uuid = this.set('uuid', Ember.generateGuid());
+    await render(hbs`
+      <div style="width: 362px; font: 16px sans-serif;">
+        {{truncate-multiline id=uuid text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
+      </div>
+    `);
 
-  return wait().then(() => {
     assert.equal(
-      this.$('.truncate-multiline--truncation-target').children().length,
+      find('.truncate-multiline--truncation-target').children.length,
       3,
       'truncated before clicking button'
     );
 
-    this.$('button').click();
+    await click('button');
 
-    return wait();
-  }).then(() => {
     assert.equal(
-      this.$(`#${uuid}`)[0].firstChild.wholeText.trim(),
+      find(`#${uuid}`).firstChild.wholeText.trim(),
       'supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious',
       'not truncated after clicking button'
     );
 
-    this.$('button').click();
+    await click('button');
 
-    return wait();
-  }).then(() => {
     assert.equal(
-      this.$('.truncate-multiline--truncation-target').children().length,
+      find('.truncate-multiline--truncation-target').children.length,
       3,
       'truncated after clicking button again'
     );
   });
-});
 
-test('clicking the button toggles full text (block)', function(assert) {
-  const uuid = this.set('uuid', Ember.generateGuid());
-  this.render(hbs`
-    <div style="width: 362px; font: 16px sans-serif;">
-      {{#truncate-multiline id=uuid as |tm|}}
-        {{#tm.target}}
-          supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious
-        {{/tm.target}}
-        {{#tm.button}}
-          see more
-        {{/tm.button}}
-      {{/truncate-multiline}}
-    </div>
-  `);
+  test('clicking the button toggles full text (block)', async function(assert) {
+    const uuid = this.set('uuid', Ember.generateGuid());
+    await render(hbs`
+      <div style="width: 362px; font: 16px sans-serif;">
+        {{#truncate-multiline id=uuid as |tm|}}
+          {{#tm.target}}
+            supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious
+          {{/tm.target}}
+          {{#tm.button}}
+            see more
+          {{/tm.button}}
+        {{/truncate-multiline}}
+      </div>
+    `);
 
-  return wait().then(() => {
     assert.equal(
-      this.$('.truncate-multiline--truncation-target').children().length,
+      find('.truncate-multiline--truncation-target').children.length,
       3,
       'truncated before clicking button'
     );
 
-    this.$('button').click();
+    await click('button');
 
-    return wait();
-  }).then(() => {
     assert.equal(
-      this.$(`#${uuid}`)[0].firstChild.wholeText.trim(),
+      find(`#${uuid}`).firstChild.wholeText.trim(),
       'supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious',
       'not truncated after clicking button'
     );
 
-    this.$('button').click();
+    await click('button');
 
-    return wait();
-  }).then(() => {
     assert.equal(
-      this.$('.truncate-multiline--truncation-target').children().length,
+      find('.truncate-multiline--truncation-target').children.length,
       3,
       'truncated after clicking button again'
     );
   });
-});
 
-test('truncation can be controlled externally via the truncate attribute', function(assert) {
-  // do truncate
-  this.set('myTruncate', true);
+  test('truncation can be controlled externally via the truncate attribute', async function(assert) {
+    // do truncate
+    this.set('myTruncate', true);
 
-  const uuid = this.set('uuid', Ember.generateGuid());
-  this.render(hbs`
-    <div style="width: 362px; font: 16px sans-serif;">
-      {{truncate-multiline id=uuid truncate=myTruncate text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
-    </div>
-  `);
+    const uuid = this.set('uuid', Ember.generateGuid());
+    await render(hbs`
+      <div style="width: 362px; font: 16px sans-serif;">
+        {{truncate-multiline id=uuid truncate=myTruncate text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
+      </div>
+    `);
 
-  return wait().then(() => {
     assert.equal(
-      this.$('.truncate-multiline--truncation-target').children().length,
+      find('.truncate-multiline--truncation-target').children.length,
       3,
       'truncation when myTruncate=true'
     );
@@ -309,10 +311,8 @@ test('truncation can be controlled externally via the truncate attribute', funct
     // don't truncate
     this.set('myTruncate', false);
 
-    return wait();
-  }).then(() => {
     assert.equal(
-      this.$(`#${uuid}`)[0].firstChild.wholeText.trim(),
+      find(`#${uuid}`).firstChild.wholeText.trim(),
       'supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious',
       'no truncation when myTruncate=false'
     );
@@ -320,170 +320,175 @@ test('truncation can be controlled externally via the truncate attribute', funct
     // do truncate again to ensure it works
     this.set('myTruncate', true);
 
-    return wait();
-  }).then(() => {
     assert.equal(
-      this.$('.truncate-multiline--truncation-target').children().length,
+      find('.truncate-multiline--truncation-target').children.length,
       3,
       'truncation again when myTruncate=true'
     );
   });
-});
 
-test('resizing triggers truncation recompute', function(assert) {
-  this.render(hbs`
-    <div id="truncate-multiline--test-container" style="width: 362px; font: 16px sans-serif;">
-      {{truncate-multiline text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
-    </div>
-  `);
+  test('resizing triggers truncation recompute', async function(assert) {
+    await render(hbs`
+      <div id="truncate-multiline--test-container" style="width: 362px; font: 16px sans-serif;">
+        {{truncate-multiline text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
+      </div>
+    `);
 
-  return wait().then(() => {
     // verify initial truncation
-    const $truncationTarget = this.$('.truncate-multiline--truncation-target');
-    const $truncationChunks = $truncationTarget.children();
-    assert.ok(
-      $truncationTarget,
-      'the truncation target exists'
-    );
+    let truncationTarget = find('.truncate-multiline--truncation-target');
+    let truncationChunks = truncationTarget.children;
+    assert.ok(truncationTarget, 'the truncation target exists');
     assert.equal(
-      $truncationChunks.length,
+      truncationChunks.length,
       3,
       'text is truncated into chunks (default 3)'
     );
 
     // change container sizing
-    this.$('#truncate-multiline--test-container')[0].style.width = '800px';
+    find('#truncate-multiline--test-container').style.width = '800px';
 
     // trigger resize event
-    window.dispatchEvent(new CustomEvent('resize'));
+    await triggerEvent(window, 'resize');
 
-    return wait();
-  }).then(() => {
     // verify container size changed
-    assert.equal(this.$('#truncate-multiline--test-container')[0].style.width, '800px', 'the container was resized');
-
-    const $truncationTarget = this.$('.truncate-multiline--truncation-target');
-    const $truncationChunks = $truncationTarget.children();
-    assert.ok(
-      $truncationTarget,
-      'the truncation target exists'
-    );
     assert.equal(
-      $truncationChunks.length,
+      find('#truncate-multiline--test-container').style.width,
+      '800px',
+      'the container was resized'
+    );
+
+    truncationTarget = find('.truncate-multiline--truncation-target');
+    truncationChunks = truncationTarget.children;
+    assert.ok(truncationTarget, 'the truncation target exists');
+    assert.equal(
+      truncationChunks.length,
       2,
       'text is truncated into fewer chunks (due to expanded width)'
     );
   });
-});
 
-test('clicking the see more/less button fires user defined actions', function(assert) {
-  assert.expect(3);
+  test('clicking the see more/less button fires user defined actions', async function(assert) {
+    assert.expect(3);
 
-  let args = [];
+    let args = [];
 
-  this.on('assertOnExpand', () => assert.ok(true, 'onExpand action triggered'));
-  this.on('assertOnCollapse', () => assert.ok(true, 'onCollapse action triggered'));
-  this.on('pushOnToggle', (isTruncated) => args.push(isTruncated));
+    this.actions.assertOnExpand = () =>
+      assert.ok(true, 'onExpand action triggered');
+    this.actions.assertOnCollapse = () =>
+      assert.ok(true, 'onCollapse action triggered');
+    this.actions.pushOnToggle = isTruncated => args.push(isTruncated);
 
-  this.render(hbs`
-    <div id="truncate-multiline--test-container" style="width: 362px; font: 16px sans-serif;">
-      {{truncate-multiline
-        onExpand=(action "assertOnExpand")
-        onCollapse=(action "assertOnCollapse")
-        onToggle=(action "pushOnToggle")
-        text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
-    </div>
-  `);
+    await render(hbs`
+      <div id="truncate-multiline--test-container" style="width: 362px; font: 16px sans-serif;">
+        {{truncate-multiline
+          onExpand=(action "assertOnExpand")
+          onCollapse=(action "assertOnCollapse")
+          onToggle=(action "pushOnToggle")
+          text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
+      </div>
+    `);
 
-  return wait().then(() => {
-    this.$('button').click();
-    return wait();
-  }).then(() => {
-    this.$('button').click();
-    return wait();
-  }).then(() => {
-    assert.deepEqual(args, [false, true], 'onToggle action triggered (twice) with the expected arguments');
+    await click('button');
+    await click('button');
+
+    assert.deepEqual(
+      args,
+      [false, true],
+      'onToggle action triggered (twice) with the expected arguments'
+    );
   });
-});
 
-test('changing the component\'s text changes the resulting markup', function(assert) {
-  assert.expect(2);
+  test("changing the component's text changes the resulting markup", async function(assert) {
+    assert.expect(2);
 
-  this.set('textToTruncate', "supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious");
+    this.set(
+      'textToTruncate',
+      'supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious'
+    );
 
-  this.render(hbs`
-    <div style="width: 362px; font: 16px sans-serif;">
-      {{truncate-multiline text=textToTruncate}}
-    </div>
-  `);
+    await render(hbs`
+      <div style="width: 362px; font: 16px sans-serif;">
+        {{truncate-multiline text=textToTruncate}}
+      </div>
+    `);
 
-  let $truncationTarget = this.$('.truncate-multiline--truncation-target').clone();
-  $truncationTarget.find('.truncate-multiline--button').remove();
-  assert.equal(
-    $truncationTarget.text().trim(),
-    'supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious',
-    'original text is rendered'
-  );
+    let truncationTarget = find(
+      '.truncate-multiline--truncation-target'
+    ).cloneNode(true);
+    truncationTarget.querySelector('.truncate-multiline--button').remove();
+    assert.equal(
+      truncationTarget.innerText.trim(),
+      'supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious',
+      'original text is rendered'
+    );
 
-  this.set('textToTruncate', "supercalifragilisticexpialidocious");
+    this.set('textToTruncate', 'supercalifragilisticexpialidocious');
 
-  $truncationTarget = this.$('.truncate-multiline--truncation-target').clone();
-  assert.equal(
-    $truncationTarget.text().trim(),
-    'supercalifragilisticexpialidocious',
-    'new text is rendered'
-  );
-});
+    truncationTarget = find('.truncate-multiline--truncation-target').cloneNode(
+      true
+    );
+    assert.equal(
+      truncationTarget.innerText.trim(),
+      'supercalifragilisticexpialidocious',
+      'new text is rendered'
+    );
+  });
 
-test('changing the component\'s lines changes the resulting markup', function(assert) {
-  assert.expect(2);
+  test("changing the component's lines changes the resulting markup", async function(assert) {
+    assert.expect(2);
 
-  this.set('lineToTruncate', 2);
+    this.set('lineToTruncate', 2);
 
-  this.render(hbs`
-    <div style="width: 362px; font: 16px sans-serif;">
-      {{truncate-multiline
-        text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"
-        lines=lineToTruncate
-      }}
-    </div>
-  `);
+    await render(hbs`
+      <div style="width: 362px; font: 16px sans-serif;">
+        {{truncate-multiline
+          text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"
+          lines=lineToTruncate
+        }}
+      </div>
+    `);
 
-  let $truncationTarget = this.$('.truncate-multiline--truncation-target');
-  assert.equal(
-    $truncationTarget.children().length,
-    2,
-    'text is rendered into original number of chunks'
-  );
+    let truncationTarget = find('.truncate-multiline--truncation-target');
+    assert.equal(
+      truncationTarget.children.length,
+      2,
+      'text is rendered into original number of chunks'
+    );
 
-  this.set('lineToTruncate', 3);
+    this.set('lineToTruncate', 3);
 
-  $truncationTarget = this.$('.truncate-multiline--truncation-target');
-  assert.equal(
-    $truncationTarget.children().length,
-    3,
-    'new number of chunks is respected'
-  );
-});
+    truncationTarget = find('.truncate-multiline--truncation-target');
+    assert.equal(
+      truncationTarget.children.length,
+      3,
+      'new number of chunks is respected'
+    );
+  });
 
-test('<BR>s are replaced with spaces in truncated output', function(assert) {
-  assert.expect(1);
+  test('<BR>s are replaced with spaces in truncated output', async function(assert) {
+    assert.expect(1);
 
-  this.set('lineToTruncate', 1);
-  this.set('text', Ember.String.htmlSafe('supercalifragilisticexpialidocious<br><br>supercalifragilisticexpialidocious<br>supercalifragilisticexpialidocious'));
+    this.set('lineToTruncate', 1);
+    this.set(
+      'text',
+      htmlSafe(
+        'supercalifragilisticexpialidocious<br><br>supercalifragilisticexpialidocious<br>supercalifragilisticexpialidocious'
+      )
+    );
 
-  this.render(hbs`
-    <div style="width: 362px; font: 16px sans-serif;">
-      {{truncate-multiline
-        text=text
-        lines=lineToTruncate
-      }}
-    </div>
-  `);
+    await render(hbs`
+      <div style="width: 362px; font: 16px sans-serif;">
+        {{truncate-multiline
+          text=text
+          lines=lineToTruncate
+        }}
+      </div>
+    `);
 
-  let $truncationTarget = this.$('.truncate-multiline--last-line');
-  assert.equal(
-    $truncationTarget[0].innerHTML.trim(),
-    'supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious'
-  );
+    let truncationTarget = find('.truncate-multiline--last-line');
+    assert.equal(
+      truncationTarget.innerHTML.trim(),
+      'supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious'
+    );
+  });
 });
