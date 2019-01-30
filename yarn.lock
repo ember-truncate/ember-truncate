@@ -2991,7 +2991,7 @@ ember-cli@~3.7.1:
     watch-detector "^0.1.0"
     yam "^1.0.0"
 
-ember-diff-attrs@^0.2.1:
+ember-diff-attrs@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/ember-diff-attrs/-/ember-diff-attrs-0.2.2.tgz#57baf6907957de004d9aff947809dfe78a054b3b"
   integrity sha512-dziQ8G8QVRMqSFMg2l9E+Te19kcwk7+Aad7Q8lOci2b3EAiU7s0IFB3Z8rRed0JRJ3e6mPJyRmNbyUuNoyCM8g==
