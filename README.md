@@ -1,6 +1,7 @@
 # Ember Truncate
 
-[![Build Status](https://travis-ci.org/nickiaconis/ember-truncate.svg?branch=master)](https://travis-ci.org/nickiaconis/ember-truncate)
+[![Build Status](https://travis-ci.org/ember-truncate/ember-truncate.svg?branch=master)](https://travis-ci.org/ember-truncate/ember-truncate)
+[![Ember Observer Score](https://emberobserver.com/badges/ember-truncate.svg)](https://emberobserver.com/addons/ember-truncate)
 [![npm version](https://badge.fury.io/js/ember-truncate.svg)](http://badge.fury.io/js/ember-truncate)
 
 This addon provides a component for truncating text in an Ember application.
