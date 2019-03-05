@@ -2993,10 +2993,10 @@ ember-faker@^1.4.0:
     ember-cli-node-assets "^0.2.2"
     faker "^3.0.0"
 
-ember-lifeline@^3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/ember-lifeline/-/ember-lifeline-3.1.1.tgz#a14936cfe840de4769a1800f8b0b1ab00770cc33"
-  integrity sha512-UsteL1i2LFS4BNSMKOIAJzIJQNypNqLCoHz23zZ6hpDTWuHB1R3mnK1mane40VVqwU8aRPoohJvowRBKXwdh6Q==
+ember-lifeline@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/ember-lifeline/-/ember-lifeline-4.0.0.tgz#c220bbfb6b1d4ad88f1caf2033af27133d51ec33"
+  integrity sha512-y92+iMUZvLD3Xc7ayKmZyo9vYu1LiC+LEqTQkiq5uEg8fyQjATdeDhk6jOB7HsNNGGuDbNi1t1oHUXQm5HW7gQ==
   dependencies:
     ember-cli-babel "^7.1.3"
 
