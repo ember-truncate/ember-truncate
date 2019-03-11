@@ -29,7 +29,7 @@
     "ember-cli-babel": "^7.5.0",
     "ember-cli-htmlbars": "^3.0.1",
     "ember-diff-attrs": "^0.2.2",
-    "ember-lifeline": "^3.1.1",
+    "ember-lifeline": "^4.1.0",
     "ember-singularity-mixins": "^2.1.0",
     "ember-wormhole": "^0.5.5"
   },
