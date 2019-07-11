@@ -27,28 +27,26 @@
 {{else}}
   {{#if _truncate}}
     {{#ember-truncate/truncation-target}}
-      {{text}}
+    {{text}} 
     {{/ember-truncate/truncation-target}}
     {{! only show the "see more" button if the text has been truncated }}
     {{#if neededTruncating}}
-      {{#ember-truncate/button-toggle
+      {{ember-truncate/button-toggle
         _destination=_buttonDestination
         _inPlace=_buttonInPlace
         onClick=(action "toggleTruncate")
-      }}
-        see more
-      {{/ember-truncate/button-toggle}}
+        seeText=seeMoreText
+      }}      
     {{/if}}
   {{else}}
     {{text}}
     {{! only show the "see less" button if the text has been truncated }}
     {{#if neededTruncating}}
-      {{#ember-truncate/button-toggle
+      {{ember-truncate/button-toggle
         _inPlace=true
         onClick=(action "toggleTruncate")
+        seeText=seeLessText
       }}
-        see less
-      {{/ember-truncate/button-toggle}}
     {{/if}}
   {{/if}}
 {{/if}}

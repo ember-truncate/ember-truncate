@@ -46,6 +46,19 @@ export default Component.extend(ResizeHandlerMixin, {
   text: '',
 
   /**
+   * The text to truncate. This is overridden if the block form is used.
+   * @type {string}
+   */
+  seeMoreText: 'see more',
+
+  /**
+   * The text to truncate. This is overridden if the block form is used.
+   * @type {string}
+   */
+  seeLessText: 'see less',
+
+
+  /**
    * The number of lines at which to begin truncation.
    * @type {number}
    * @default 3
@@ -69,6 +82,7 @@ export default Component.extend(ResizeHandlerMixin, {
       return this.__truncate;
     },
     set(key, value) {
+      console.log(key +" "+ value);
       if (!value) {
         this.set('_buttonDestination', null);
       }
@@ -107,11 +121,7 @@ export default Component.extend(ResizeHandlerMixin, {
    */
   _neededTruncating: false,
 
-  /**
-   * Keeps track of whether or not _doTruncate has been run.
-   * @type {boolean}
-   * @private
-   */
+
   _didTruncate: false,
 
   /**
@@ -133,27 +143,17 @@ export default Component.extend(ResizeHandlerMixin, {
    * Resets the component when the `text` attribute of the component has changed
    * @return {Void}
    */
-  didReceiveAttrs: diffAttrs('lines', 'text', 'truncate', function(
-    changedAttrs
-  ) {
-    // `changedAttrs` will be null for the first invocation
-    // short circuiting for this case makes `didReceiveAttrs` act like `didUpdateAttrs`
-    if (changedAttrs == null) {
-      return;
-    }
 
-    if ('truncate' in changedAttrs) {
-      this.set('_truncate', this.get('truncate'));
-    }
+   /**
+   * Resets the component when the `seeMoreText` attribute of the component has changed
+   * @return {Void}
+   */
 
-    if (
-      'text' in changedAttrs ||
-      'truncate' in changedAttrs ||
-      'lines' in changedAttrs
-    ) {
-      this._resetState();
-    }
-  }),
+   /**
+   * Resets the component when the `seeLessText` attribute of the component has changed
+   * @return {Void}
+   */
+
 
   /**
    * Kicks off the truncation after render.
@@ -172,6 +172,8 @@ export default Component.extend(ResizeHandlerMixin, {
    * @private
    */
   _resetState() {
+    seeMoreText = this.get('seeMoreText');
+    console.log(seeMoreText);
     const truncate = this.get('_truncate');
     if (truncate) {
       // trigger a rerender/retruncate
@@ -239,6 +241,7 @@ export default Component.extend(ResizeHandlerMixin, {
      * @return {Void}
      */
     toggleTruncate() {
+      console.log(this.get("seeMoreText"));
       let wasTruncated = this.get('_truncate');
       this.toggleProperty('_truncate');
 
