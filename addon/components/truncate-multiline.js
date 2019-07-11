@@ -45,10 +45,10 @@ export default Component.extend(ResizeHandlerMixin, {
    */
   text: '',
 
-  /* Default value to see Less*/
+  /* Default value to see Less */
   seeLessText: 'see less',
 
-  /* Default value to see More*/
+  /* Default value to see More */
   seeMoreText: 'see more',
 
   /**
