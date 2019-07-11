@@ -36,7 +36,7 @@
         _inPlace=_buttonInPlace
         onClick=(action "toggleTruncate")
       }}
-        see more
+        {{ seeMoreText }}
       {{/ember-truncate/button-toggle}}
     {{/if}}
   {{else}}
@@ -47,7 +47,7 @@
         _inPlace=true
         onClick=(action "toggleTruncate")
       }}
-        see less
+        {{ seeLessText }}
       {{/ember-truncate/button-toggle}}
     {{/if}}
   {{/if}}
