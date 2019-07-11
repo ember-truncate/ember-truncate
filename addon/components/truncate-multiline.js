@@ -121,6 +121,11 @@ export default Component.extend(ResizeHandlerMixin, {
    */
   _neededTruncating: false,
 
+  /**
+   * Keeps track of whether or not _doTruncate has been run.
+   * @type {boolean}
+   * @private
+   */
 
   _didTruncate: false,
 
@@ -144,6 +149,19 @@ export default Component.extend(ResizeHandlerMixin, {
    * @return {Void}
    */
 
+  didReceiveAttrs: diffAttrs('lines', 'text', 'truncate', function(
+    changedAttrs
+  ) {
+    // `changedAttrs` will be null for the first invocation
+    // short circuiting for this case makes `didReceiveAttrs` act like `didUpdateAttrs`
+    if (changedAttrs == null) {
+      return;
+    }
+
+    if ('truncate' in changedAttrs) {
+      this.set('_truncate', this.get('truncate'));
+    }
+
    /**
    * Resets the component when the `seeMoreText` attribute of the component has changed
    * @return {Void}
@@ -153,7 +171,14 @@ export default Component.extend(ResizeHandlerMixin, {
    * Resets the component when the `seeLessText` attribute of the component has changed
    * @return {Void}
    */
-
+  if (
+    'text' in changedAttrs ||
+    'truncate' in changedAttrs ||
+    'lines' in changedAttrs
+  ) {
+    this._resetState();
+  }
+}),
 
   /**
    * Kicks off the truncation after render.
