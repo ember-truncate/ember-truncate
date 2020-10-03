@@ -4050,9 +4050,10 @@ ember-router-generator@^2.0.0:
     "@babel/traverse" "^7.4.5"
     recast "^0.18.1"
 
-ember-singularity-mixins@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/ember-singularity-mixins/-/ember-singularity-mixins-2.1.0.tgz#e72c5f4128ec6d39c47bdf1fa0f363a2631f76f3"
+ember-singularity-mixins@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/ember-singularity-mixins/-/ember-singularity-mixins-2.2.0.tgz#aa50e1e63ab083f1ed875fc91750b58247d49446"
+  integrity sha512-RA0l7hr5ALkgAUeGzBHqpeV/Ehzrp2Ie0AXmHrGcMwmnHlwFD7eKa3+0ab6t3k8lAKstuiu/1QG+KbMBPy8PWw==
   dependencies:
     ember-cli-babel "^6.6.0"
     ember-singularity "^1.2.0"
