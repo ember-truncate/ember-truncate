@@ -1,0 +1,23 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  versioning-strategy: increase
+  ignore:
+  - dependency-name: ember-cli-babel
+    versions:
+    - 7.26.3
+  - dependency-name: ember-cli-htmlbars
+    versions:
+    - 5.3.1
+    - 5.3.2
+    - 5.4.0
+    - 5.6.0
+    - 5.6.2
+    - 5.6.3
+    - 5.6.4
+    - 5.6.5
+    - 5.7.0
