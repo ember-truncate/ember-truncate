@@ -185,6 +185,21 @@ export default Component.extend(ResizeHandlerMixin, {
     }
   },
 
+  _addWrappingSpan(truncationTargetElem) {
+    const doc = this.get('document');
+    const ellipsizedSpan = truncationTargetElem.lastChild;
+
+    truncationTargetElem.removeChild(ellipsizedSpan);
+
+    const wrappingSpan = doc.createElement('span');
+    wrappingSpan.classList.add(`${cssNamespace}--last-line-wrapper`);
+    wrappingSpan.appendChild(ellipsizedSpan);
+
+    truncationTargetElem.appendChild(wrappingSpan);
+
+    return wrappingSpan;
+  },
+
   /**
    * Does the truncation by calling the clamp utility.
    * @return {Void}
@@ -201,20 +216,14 @@ export default Component.extend(ResizeHandlerMixin, {
       'must use the `target` component from the yielded namespace',
       el instanceof HTMLElement
     );
-    clamp(
-      el,
-      this.get('lines'),
-      didTruncate => this.set('_neededTruncating', didTruncate),
-      `${cssNamespace}--last-line`,
-      doc
-    );
-    const ellipsizedSpan = el.lastChild;
-    el.removeChild(ellipsizedSpan);
-    const wrappingSpan = doc.createElement('span');
-    wrappingSpan.classList.add(`${cssNamespace}--last-line-wrapper`);
-    wrappingSpan.appendChild(ellipsizedSpan);
-    this.set('_buttonDestination', wrappingSpan);
-    el.appendChild(wrappingSpan);
+
+    clamp(el, this.get('lines'), `${cssNamespace}--last-line`, doc, (didTruncate) => {
+      this.set('_neededTruncating', didTruncate);
+      if (didTruncate) {
+        this.set('_buttonDestination', this._addWrappingSpan(el));
+      }
+    });
+
     this.set('_didTruncate', true);
   },
 

@@ -199,16 +199,27 @@ module('Integration | Component | truncate-multiline', function(hooks) {
     );
   });
 
-  test("the button is hidden if the text isn't long enough to truncate", async function(assert) {
+  test('inline form without enough text to truncate works', async function(assert) {
     await render(hbs`
       <div style="width: 362px; font: 16px sans-serif;">
         {{truncate-multiline text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
       </div>
     `);
 
+    const truncationTarget = find('.truncate-multiline--truncation-target');
+    const truncationChunks = truncationTarget.children;
+    const lastChunkWrapper = [...truncationChunks].slice(-1);
+
     assert
       .dom('truncate-multiline--button')
       .doesNotExist('the button is not rendered');
+
+    assert
+      .dom(lastChunkWrapper[0])
+      .doesNotHaveClass(
+        'truncate-multiline--last-line-wrapper',
+        'last chunk is not wrapped if truncation was not needed'
+      );
   });
 
   test('clicking the button toggles full text (inline)', async function(assert) {
