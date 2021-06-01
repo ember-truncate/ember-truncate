@@ -5,10 +5,10 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, click, find, triggerEvent } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | truncate-multiline', function(hooks) {
+module('Integration | Component | truncate-multiline', function (hooks) {
   setupRenderingTest(hooks);
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     this.actions = {};
     this.send = (actionName, ...args) =>
       this.actions[actionName].apply(this, args);
@@ -19,14 +19,14 @@ module('Integration | Component | truncate-multiline', function(hooks) {
     ).style.zoom = 1;
   });
 
-  hooks.afterEach(function() {
+  hooks.afterEach(function () {
     // undo zoom reset
     document.querySelector(
       '#ember-testing-container #ember-testing'
     ).style.zoom = null;
   });
 
-  test('inline form works', async function(assert) {
+  test('inline form works', async function (assert) {
     await render(
       hbs`
       <div style="width: 362px; font: 16px sans-serif;">
@@ -50,7 +50,7 @@ module('Integration | Component | truncate-multiline', function(hooks) {
       [...truncationChunks]
         .slice(0, 2)
         .every(
-          chunk =>
+          (chunk) =>
             chunk.innerText.trim() === 'supercalifragilisticexpialidocious'
         ),
       'first chunks contain expected text'
@@ -84,7 +84,7 @@ module('Integration | Component | truncate-multiline', function(hooks) {
     );
   });
 
-  test('block form works', async function(assert) {
+  test('block form works', async function (assert) {
     await render(hbs`
       <div style="width: 362px; font: 16px sans-serif;">
         {{#truncate-multiline as |tm|}}
@@ -112,7 +112,7 @@ module('Integration | Component | truncate-multiline', function(hooks) {
       [...truncationChunks]
         .slice(0, 2)
         .every(
-          chunk =>
+          (chunk) =>
             chunk.innerText.trim() === 'supercalifragilisticexpialidocious'
         ),
       'first chunks contain expected text'
@@ -146,7 +146,7 @@ module('Integration | Component | truncate-multiline', function(hooks) {
     );
   });
 
-  test('block form with nested elements works', async function(assert) {
+  test('block form with nested elements works', async function (assert) {
     await render(hbs`
       <div style="width: 362px; font: 16px sans-serif;">
         {{#truncate-multiline as |tm|}}
@@ -171,7 +171,7 @@ module('Integration | Component | truncate-multiline', function(hooks) {
     );
   });
 
-  test('specifying a different number of lines works', async function(assert) {
+  test('specifying a different number of lines works', async function (assert) {
     await render(hbs`
       <div style="width: 362px; font: 16px sans-serif;">
         {{truncate-multiline lines=2 text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
@@ -199,7 +199,7 @@ module('Integration | Component | truncate-multiline', function(hooks) {
     );
   });
 
-  test("the button is hidden if the text isn't long enough to truncate", async function(assert) {
+  test("the button is hidden if the text isn't long enough to truncate", async function (assert) {
     await render(hbs`
       <div style="width: 362px; font: 16px sans-serif;">
         {{truncate-multiline text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
@@ -211,7 +211,7 @@ module('Integration | Component | truncate-multiline', function(hooks) {
       .doesNotExist('the button is not rendered');
   });
 
-  test('clicking the button toggles full text (inline)', async function(assert) {
+  test('clicking the button toggles full text (inline)', async function (assert) {
     const uuid = this.set('uuid', Ember.generateGuid());
     await render(hbs`
       <div style="width: 362px; font: 16px sans-serif;">
@@ -242,7 +242,7 @@ module('Integration | Component | truncate-multiline', function(hooks) {
     );
   });
 
-  test('clicking the button toggles full text (block)', async function(assert) {
+  test('clicking the button toggles full text (block)', async function (assert) {
     const uuid = this.set('uuid', Ember.generateGuid());
     await render(hbs`
       <div style="width: 362px; font: 16px sans-serif;">
@@ -280,7 +280,7 @@ module('Integration | Component | truncate-multiline', function(hooks) {
     );
   });
 
-  test('truncation can be controlled externally via the truncate attribute', async function(assert) {
+  test('truncation can be controlled externally via the truncate attribute', async function (assert) {
     // do truncate
     this.set('myTruncate', true);
 
@@ -316,7 +316,7 @@ module('Integration | Component | truncate-multiline', function(hooks) {
     );
   });
 
-  test('resizing triggers truncation recompute', async function(assert) {
+  test('resizing triggers truncation recompute', async function (assert) {
     await render(hbs`
       <div id="truncate-multiline--test-container" style="width: 362px; font: 16px sans-serif;">
         {{truncate-multiline text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
@@ -356,7 +356,7 @@ module('Integration | Component | truncate-multiline', function(hooks) {
     );
   });
 
-  test('clicking the see more/less button fires user defined actions', async function(assert) {
+  test('clicking the see more/less button fires user defined actions', async function (assert) {
     assert.expect(3);
 
     let args = [];
@@ -365,7 +365,7 @@ module('Integration | Component | truncate-multiline', function(hooks) {
       assert.ok(true, 'onExpand action triggered');
     this.actions.assertOnCollapse = () =>
       assert.ok(true, 'onCollapse action triggered');
-    this.actions.pushOnToggle = isTruncated => args.push(isTruncated);
+    this.actions.pushOnToggle = (isTruncated) => args.push(isTruncated);
 
     await render(hbs`
       <div id="truncate-multiline--test-container" style="width: 362px; font: 16px sans-serif;">
@@ -387,7 +387,7 @@ module('Integration | Component | truncate-multiline', function(hooks) {
     );
   });
 
-  test("changing the component's text changes the resulting markup", async function(assert) {
+  test("changing the component's text changes the resulting markup", async function (assert) {
     assert.expect(2);
 
     this.set(
@@ -423,7 +423,7 @@ module('Integration | Component | truncate-multiline', function(hooks) {
     );
   });
 
-  test("changing the component's lines changes the resulting markup", async function(assert) {
+  test("changing the component's lines changes the resulting markup", async function (assert) {
     assert.expect(2);
 
     this.set('lineToTruncate', 2);
@@ -454,7 +454,7 @@ module('Integration | Component | truncate-multiline', function(hooks) {
     );
   });
 
-  test('<BR>s are replaced with spaces in truncated output', async function(assert) {
+  test('<BR>s are replaced with spaces in truncated output', async function (assert) {
     assert.expect(1);
 
     this.set('lineToTruncate', 1);

@@ -9,5 +9,5 @@ export default Component.extend({
     if (typeof onClick === 'function') {
       onClick();
     }
-  }
+  },
 });
