@@ -1,3 +1,5 @@
+{{page-title "Ember Truncate"}}
+
 <h2 id="title">Welcome to Ember</h2>
 
 {{! template-lint-disable no-inline-styles }}
@@ -10,13 +12,13 @@
 
 {{! template-lint-disable no-inline-styles }}
 <p style="width: 362px; font: 16px sans-serif;">
-  {{#truncate-multiline lines=2 as |tm|}}
-    {{#tm.target}}
+  <TruncateMultiline @lines={{2}} as |tm|>
+    <tm.target>
       supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious
-    {{/tm.target}}
-    {{#tm.button}}
+    </tm.target>
+    <tm.button>
       <span aria-hidden="true">{{if tm.isTruncated "⬇️" "⬆️"}}</span>
       <span class="truncate-multiline--visually-hidden">{{if tm.isTruncated "view more text" "view less text"}}</span>
-    {{/tm.button}}
-  {{/truncate-multiline}}
+    </tm.button>
+  </TruncateMultiline>
 </p>

@@ -10,18 +10,33 @@
  * @param {String} cssClass - A CSS class applied to the last line instead of inline CSS.
  */
 
-var measure, text, lineWidth, pos,
-  lineStart, lineCount, wordStart,
-  line, lineText, wasNewLine,
-  nodeStack, seedQueue, pendingQueue,
-  textNode, measureWidth, thisNode, nextQueue,
-  ce, ctn;
+var measure,
+  text,
+  lineWidth,
+  pos,
+  lineStart,
+  lineCount,
+  wordStart,
+  line,
+  lineText,
+  wasNewLine,
+  nodeStack,
+  seedQueue,
+  pendingQueue,
+  textNode,
+  measureWidth,
+  thisNode,
+  nextQueue,
+  ce,
+  ctn;
 
 function appendNodeAndQueueToElement(element, node, queue) {
   var queueLength = queue && queue.length,
-      i, aNode, bNode;
+    i,
+    aNode,
+    bNode;
   // add nodes waiting to be finalized
-  for(i = 0; i < queueLength; ++i) {
+  for (i = 0; i < queueLength; ++i) {
     element.appendChild(queue[i]);
   }
   if (nodeStack.length) {
@@ -30,7 +45,11 @@ function appendNodeAndQueueToElement(element, node, queue) {
     // add the text to the last node on the stack
     nodeStack[i].appendChild(node);
     // ensure nodes from the stack are appended to each other
-    for (; i > 0 && (aNode = nodeStack[i]).parentNode !== (bNode = nodeStack[i - 1]); --i) {
+    for (
+      ;
+      i > 0 && (aNode = nodeStack[i]).parentNode !== (bNode = nodeStack[i - 1]);
+      --i
+    ) {
       bNode.appendChild(aNode);
     }
     // ensure root node from stack is added to measurement node
@@ -129,9 +148,12 @@ export default function clamp(el, lineClamp, cb, cssClass, doc) {
       }
       // have we exceeded allowed line width?
       if (lineWidth <= measureWidth) {
-        if(wasNewLine) {
+        if (wasNewLine) {
           // we have a long word so it gets a line of it's own
-          lineText = text.substr(lineStart, Math.min(pos + 1, text.length) - lineStart);
+          lineText = text.substr(
+            lineStart,
+            Math.min(pos + 1, text.length) - lineStart
+          );
           // next line start position
           lineStart = Math.min(pos + 1, text.length);
           // move to the next word
@@ -219,13 +241,13 @@ export default function clamp(el, lineClamp, cb, cssClass, doc) {
     if ('string' === typeof cssClass) {
       el.lastChild.classList.add(cssClass);
     } else {
-      (function(s) {
+      (function (s) {
         s.display = 'block';
         s.overflow = 'hidden';
         s.textOverflow = 'ellipsis';
         s.whiteSpace = 'nowrap';
         s.width = '100%';
-      }(el.lastChild.style));
+      })(el.lastChild.style);
     }
   }
 
