@@ -31,7 +31,7 @@
     "ember-diff-attrs": "^0.2.3",
     "ember-lifeline": "^3.1.1",
     "ember-singularity-mixins": "^2.2.0",
-    "ember-wormhole": "^0.5.5"
+    "ember-wormhole": "^0.6.0"
   },
   "devDependencies": {
     "@ember/optional-features": "^2.0.0",
