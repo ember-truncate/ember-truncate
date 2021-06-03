@@ -47,6 +47,7 @@ module.exports = {
         'addon-test-support/**',
         'app/**',
         'tests/dummy/app/**',
+        'tests/dummy/config/deprecation-workflow.js',
       ],
       parserOptions: {
         sourceType: 'script',
