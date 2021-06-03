@@ -3989,7 +3989,7 @@ ember-cli-babel-plugin-helpers@^1.0.0, ember-cli-babel-plugin-helpers@^1.1.1:
   resolved "https://registry.yarnpkg.com/ember-cli-babel-plugin-helpers/-/ember-cli-babel-plugin-helpers-1.1.1.tgz#5016b80cdef37036c4282eef2d863e1d73576879"
   integrity sha512-sKvOiPNHr5F/60NLd7SFzMpYPte/nnGkq/tMIfXejfKHIhaiIkYFqX8Z9UFTKWLLn+V7NOaby6niNPZUdvKCRw==
 
-ember-cli-babel@^6.0.0-beta.4, ember-cli-babel@^6.16.0, ember-cli-babel@^6.6.0, ember-cli-babel@^6.8.1:
+ember-cli-babel@^6.0.0-beta.4, ember-cli-babel@^6.16.0, ember-cli-babel@^6.8.1:
   version "6.17.2"
   resolved "https://registry.yarnpkg.com/ember-cli-babel/-/ember-cli-babel-6.17.2.tgz#f0d53d2fb95e70c15d8db84760d045f88f458f69"
   integrity sha512-9KcCvF1PcelEFTSiJ/Ld20tfuW9acMkwHC/xINLsmwqJVDbm3oEqWtiFDZ5ebaC278O5I0GqNJWJLYNoWMNZ8g==
@@ -4460,19 +4460,22 @@ ember-router-generator@^2.0.0:
     "@babel/traverse" "^7.4.5"
     recast "^0.18.1"
 
-ember-singularity-mixins@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/ember-singularity-mixins/-/ember-singularity-mixins-2.2.0.tgz#aa50e1e63ab083f1ed875fc91750b58247d49446"
-  integrity sha512-RA0l7hr5ALkgAUeGzBHqpeV/Ehzrp2Ie0AXmHrGcMwmnHlwFD7eKa3+0ab6t3k8lAKstuiu/1QG+KbMBPy8PWw==
+ember-singularity-mixins@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/ember-singularity-mixins/-/ember-singularity-mixins-4.0.0.tgz#540254b61512ca51174af793cc935d843f778e90"
+  integrity sha512-yPkbIBesgYWP6JeXfGXrfyLJLTsnq5hs9bNC2SF5DUfpwi0Qo6nsbCpx94P+KQjw9kZiGuqbRiSxbsDCiMsBgw==
   dependencies:
-    ember-cli-babel "^6.6.0"
-    ember-singularity "^1.2.0"
+    ember-cli-babel "^7.22.1"
+    ember-cli-htmlbars "^5.3.1"
+    ember-singularity "^2.0.0"
 
-ember-singularity@^1.2.0:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/ember-singularity/-/ember-singularity-1.2.1.tgz#16ae0b88add7ccb21b9c1638329f94c6a702c17e"
+ember-singularity@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/ember-singularity/-/ember-singularity-2.0.0.tgz#e16750041f4768d5722bccc679b401736b080bae"
+  integrity sha512-00kgz/KIUV04+F+hLWfC/+lt9nOWGEYX7nlsoITKCODH8jvbMlJiu4ozDZyys/rZI3Uo7nAnXfr4Qc3089eADg==
   dependencies:
-    ember-cli-babel "^6.6.0"
+    ember-cli-babel "^7.22.1"
+    ember-cli-htmlbars "^5.3.1"
 
 ember-source-channel-url@^1.0.1:
   version "1.1.0"
