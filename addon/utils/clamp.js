@@ -10,7 +10,7 @@
  * @param {String} cssClass - A CSS class applied to the last line instead of inline CSS.
  */
 
-var measure,
+let measure,
   text,
   lineWidth,
   pos,
@@ -31,7 +31,7 @@ var measure,
   ctn;
 
 function appendNodeAndQueueToElement(element, node, queue) {
-  var queueLength = queue && queue.length,
+  let queueLength = queue && queue.length,
     i,
     aNode,
     bNode;
