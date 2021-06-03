@@ -10,13 +10,13 @@
     "overflow",
     "ellipsis"
   ],
+  "repository": "https://github.com/ember-truncate/ember-truncate",
   "license": "MIT",
   "author": "Nick Iaconis",
   "directories": {
     "doc": "doc",
     "test": "tests"
   },
-  "repository": "https://github.com/ember-truncate/ember-truncate",
   "scripts": {
     "build": "ember build",
     "lint:hbs": "ember-template-lint .",
@@ -58,12 +58,32 @@
     "eslint-plugin-ember": "^8.14.0",
     "eslint-plugin-node": "^11.1.0",
     "loader.js": "^4.7.0",
-    "qunit-dom": "^1.6.0"
+    "qunit-dom": "^1.6.0",
+    "release-it": "^14.2.1",
+    "release-it-lerna-changelog": "^3.1.0"
   },
   "engines": {
     "node": "6.* || 8.* || >= 10.*"
   },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
   "ember-addon": {
     "configPath": "tests/dummy/config"
+  },
+  "release-it": {
+    "plugins": {
+      "release-it-lerna-changelog": {
+        "infile": "CHANGELOG.md",
+        "launchEditor": true
+      }
+    },
+    "git": {
+      "tagName": "v${version}"
+    },
+    "github": {
+      "release": true,
+      "tokenRef": "GITHUB_AUTH"
+    }
   }
 }
