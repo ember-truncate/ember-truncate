@@ -1,7 +1,7 @@
 Ember Truncate
 ==============================================================================
 
-[![Build Status](https://travis-ci.org/ember-truncate/ember-truncate.svg?branch=master)](https://travis-ci.org/ember-truncate/ember-truncate)
+![CI Build](https://github.com/ember-truncate/ember-truncate/workflows/CI%20Build/badge.svg)
 [![Ember Observer Score](https://emberobserver.com/badges/ember-truncate.svg)](https://emberobserver.com/addons/ember-truncate)
 [![npm version](https://badge.fury.io/js/ember-truncate.svg)](http://badge.fury.io/js/ember-truncate)
 
@@ -13,7 +13,7 @@ Compatibility
 
 * Ember.js v3.16 or above
 * Ember CLI v2.13 or above
-* Node.js v10 or above
+* Node.js v12 or above
 
 
 Installation
