@@ -1,4 +1,5 @@
-# Ember Truncate
+Ember Truncate
+==============================================================================
 
 [![Build Status](https://travis-ci.org/ember-truncate/ember-truncate.svg?branch=master)](https://travis-ci.org/ember-truncate/ember-truncate)
 [![Ember Observer Score](https://emberobserver.com/badges/ember-truncate.svg)](https://emberobserver.com/addons/ember-truncate)
@@ -6,11 +7,25 @@
 
 This addon provides a component for truncating text in an Ember application.
 
-## Installation
 
-* `npm install ember-truncate`
+Compatibility
+------------------------------------------------------------------------------
 
-## Usage
+* Ember.js v3.16 or above
+* Ember CLI v2.13 or above
+* Node.js v10 or above
+
+
+Installation
+------------------------------------------------------------------------------
+
+```
+ember install ember-truncate
+```
+
+
+Usage
+------------------------------------------------------------------------------
 
 To get started, place the `truncate-multiline` component in one of your templates and provide a string to the `text` attribute.
 
@@ -85,19 +100,14 @@ The `onToggle` action is triggered whenever the text is expanded or collapsed. T
 {{truncate-multiline text="Long text to truncate." onToggle=(action "updateTableOfContents")}}
 ```
 
-## Contributing
 
-* fork this repository
-* `git clone` your fork
-* `npm install`
-* make changes
-* `npm test` to verify tests pass for supported versions of Ember
-* `git push` changes to your fork
-* open a pull request against this repository
+Contributing
+------------------------------------------------------------------------------
 
-## Running Tests
+See the [Contributing](CONTRIBUTING.md) guide for details.
 
-* `ember test` runs tests against the version of Ember listed in `package.json`
-* `ember test --server` livereloads tests in Chrome, making failrues easier to debug
-* `npm test` runs tests against all supported versions of Ember
-* `ember try:each` runs tests against the latest versions of Ember (in addition to the supported Ember versions)
+
+License
+------------------------------------------------------------------------------
+
+This project is licensed under the [MIT License](LICENSE.md).
