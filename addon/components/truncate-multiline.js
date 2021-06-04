@@ -1,3 +1,4 @@
+import { set } from '@ember/object';
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import ResizeHandlerMixin from 'ember-singularity-mixins/mixins/resize-handler';
@@ -70,7 +71,7 @@ export default Component.extend(ResizeHandlerMixin, {
    * @type {boolean}
    * @private
    */
-  _truncate: computed({
+  _truncate: computed('__truncate', {
     get() {
       return this.__truncate;
     },
@@ -79,7 +80,7 @@ export default Component.extend(ResizeHandlerMixin, {
         this.set('_buttonDestination', null);
       }
 
-      return (this.__truncate = value);
+      return set(this, '__truncate', value);
     },
   }),
 
@@ -139,27 +140,30 @@ export default Component.extend(ResizeHandlerMixin, {
    * Resets the component when the `text` attribute of the component has changed
    * @return {Void}
    */
-  didReceiveAttrs: diffAttrs('lines', 'text', 'truncate', function(
-    changedAttrs
-  ) {
-    // `changedAttrs` will be null for the first invocation
-    // short circuiting for this case makes `didReceiveAttrs` act like `didUpdateAttrs`
-    if (changedAttrs == null) {
-      return;
-    }
+  didReceiveAttrs: diffAttrs(
+    'lines',
+    'text',
+    'truncate',
+    function (changedAttrs) {
+      // `changedAttrs` will be null for the first invocation
+      // short circuiting for this case makes `didReceiveAttrs` act like `didUpdateAttrs`
+      if (changedAttrs == null) {
+        return;
+      }
 
-    if ('truncate' in changedAttrs) {
-      this.set('_truncate', this.get('truncate'));
-    }
+      if ('truncate' in changedAttrs) {
+        this.set('_truncate', this.truncate);
+      }
 
-    if (
-      'text' in changedAttrs ||
-      'truncate' in changedAttrs ||
-      'lines' in changedAttrs
-    ) {
-      this._resetState();
+      if (
+        'text' in changedAttrs ||
+        'truncate' in changedAttrs ||
+        'lines' in changedAttrs
+      ) {
+        this._resetState();
+      }
     }
-  }),
+  ),
 
   /**
    * Kicks off the truncation after render.
@@ -167,7 +171,7 @@ export default Component.extend(ResizeHandlerMixin, {
    */
   didRender() {
     this._super(...arguments);
-    if (!this.get('_didTruncate') && this.get('_truncate')) {
+    if (!this._didTruncate && this._truncate) {
       scheduleOnce('afterRender', this, this._doTruncation);
     }
   },
@@ -178,7 +182,7 @@ export default Component.extend(ResizeHandlerMixin, {
    * @private
    */
   _resetState() {
-    const truncate = this.get('_truncate');
+    const truncate = this._truncate;
     if (truncate) {
       // trigger a rerender/retruncate
       this.setProperties({
@@ -197,7 +201,7 @@ export default Component.extend(ResizeHandlerMixin, {
    * @private
    */
   _doTruncation() {
-    const doc = this.get('document');
+    const doc = this.document;
 
     const el = this.element.querySelector(
       `.${cssNamespace}--truncation-target`
@@ -209,8 +213,8 @@ export default Component.extend(ResizeHandlerMixin, {
     );
     clamp(
       el,
-      this.get('lines'),
-      didTruncate => this.set('_neededTruncating', didTruncate),
+      this.lines,
+      (didTruncate) => this.set('_neededTruncating', didTruncate),
       `${cssNamespace}--last-line`,
       doc
     );
@@ -245,7 +249,7 @@ export default Component.extend(ResizeHandlerMixin, {
      * @return {Void}
      */
     toggleTruncate() {
-      let wasTruncated = this.get('_truncate');
+      let wasTruncated = this._truncate;
       this.toggleProperty('_truncate');
 
       if (wasTruncated) {

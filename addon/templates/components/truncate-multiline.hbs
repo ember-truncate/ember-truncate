@@ -1,4 +1,4 @@
-{{#if hasBlock}}
+{{#if (has-block)}}
   {{#if _truncate}}
     {{yield
       (hash
@@ -26,29 +26,22 @@
   {{/if}}
 {{else}}
   {{#if _truncate}}
-    {{#ember-truncate/truncation-target}}
+    <EmberTruncate::TruncationTarget>
       {{text}}
-    {{/ember-truncate/truncation-target}}
+    </EmberTruncate::TruncationTarget>
     {{! only show the "see more" button if the text has been truncated }}
     {{#if neededTruncating}}
-      {{#ember-truncate/button-toggle
-        _destination=_buttonDestination
-        _inPlace=_buttonInPlace
-        onClick=(action "toggleTruncate")
-      }}
+      <EmberTruncate::ButtonToggle @_destination={{_buttonDestination}} @_inPlace={{_buttonInPlace}} @onClick={{action "toggleTruncate"}}>
         {{seeMoreText}}
-      {{/ember-truncate/button-toggle}}
+      </EmberTruncate::ButtonToggle>
     {{/if}}
   {{else}}
     {{text}}
     {{! only show the "see less" button if the text has been truncated }}
     {{#if neededTruncating}}
-      {{#ember-truncate/button-toggle
-        _inPlace=true
-        onClick=(action "toggleTruncate")
-      }}
+      <EmberTruncate::ButtonToggle @_inPlace={{true}} @onClick={{action "toggleTruncate"}}>
         {{seeLessText}}
-      {{/ember-truncate/button-toggle}}
+      </EmberTruncate::ButtonToggle>
     {{/if}}
   {{/if}}
 {{/if}}
