@@ -46,6 +46,12 @@ export default Component.extend(ResizeHandlerMixin, {
    */
   text: '',
 
+  /* Default value to see Less */
+  seeLessText: 'see less',
+
+  /* Default value to see More */
+  seeMoreText: 'see more',
+
   /**
    * The number of lines at which to begin truncation.
    * @type {number}

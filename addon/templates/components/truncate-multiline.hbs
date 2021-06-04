@@ -32,7 +32,7 @@
     {{! only show the "see more" button if the text has been truncated }}
     {{#if neededTruncating}}
       <EmberTruncate::ButtonToggle @_destination={{_buttonDestination}} @_inPlace={{_buttonInPlace}} @onClick={{action "toggleTruncate"}}>
-        see more
+        {{seeMoreText}}
       </EmberTruncate::ButtonToggle>
     {{/if}}
   {{else}}
@@ -40,7 +40,7 @@
     {{! only show the "see less" button if the text has been truncated }}
     {{#if neededTruncating}}
       <EmberTruncate::ButtonToggle @_inPlace={{true}} @onClick={{action "toggleTruncate"}}>
-        see less
+        {{seeLessText}}
       </EmberTruncate::ButtonToggle>
     {{/if}}
   {{/if}}
