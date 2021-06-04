@@ -480,4 +480,29 @@ module('Integration | Component | truncate-multiline', function (hooks) {
       'supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious'
     );
   });
+
+  test('setting a custom see more/less text works', async function (assert) {
+    assert.expect(1);
+
+    this.set('lineToTruncate', 1);
+    this.set('seeMoreText', 'Open for a surprise!');
+    this.set('seeLessText', 'Surprise over :(');
+    this.set(
+      'text',
+      'supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious'
+    );
+
+    await render(hbs`
+      {{truncate-multiline
+        text=text
+        seeMoreText=seeMoreText
+        seeLessText=seeLessText
+        lines=lineToTruncate
+      }}
+    `);
+
+    let seeMoreButton = find('.truncate-multiline--button');
+
+    assert.equal(seeMoreButton.innerHTML.trim(), 'Open for a surprise!');
+  });
 });
