@@ -1,1 +1,1 @@
-{"engine":"ember-template-lint","filePath":"addon/templates/components/truncate-multiline.hbs","ruleId":"no-curly-component-invocation","line":39,"column":4,"createdDate":1622530800000,"warnDate":1625122800000,"errorDate":1627714800000}
+{"engine":"ember-template-lint","filePath":"addon/templates/components/truncate-multiline.hbs","ruleId":"no-curly-component-invocation","line":39,"column":4,"createdDate":1622703600000,"warnDate":1625295600000,"errorDate":1627887600000}
