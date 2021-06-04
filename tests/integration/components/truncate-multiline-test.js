@@ -1,8 +1,8 @@
-import Ember from 'ember';
 import { htmlSafe } from '@ember/template';
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render, click, find, triggerEvent } from '@ember/test-helpers';
+import { guidFor } from '@ember/object/internals';
 import hbs from 'htmlbars-inline-precompile';
 
 module('Integration | Component | truncate-multiline', function (hooks) {
@@ -212,7 +212,7 @@ module('Integration | Component | truncate-multiline', function (hooks) {
   });
 
   test('clicking the button toggles full text (inline)', async function (assert) {
-    const uuid = this.set('uuid', Ember.generateGuid());
+    const uuid = this.set('uuid', guidFor({}));
     await render(hbs`
       <div style="width: 362px; font: 16px sans-serif;">
         {{truncate-multiline id=uuid text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
@@ -243,7 +243,7 @@ module('Integration | Component | truncate-multiline', function (hooks) {
   });
 
   test('clicking the button toggles full text (block)', async function (assert) {
-    const uuid = this.set('uuid', Ember.generateGuid());
+    const uuid = this.set('uuid', guidFor({}));
     await render(hbs`
       <div style="width: 362px; font: 16px sans-serif;">
         {{#truncate-multiline id=uuid as |tm|}}
@@ -284,7 +284,7 @@ module('Integration | Component | truncate-multiline', function (hooks) {
     // do truncate
     this.set('myTruncate', true);
 
-    const uuid = this.set('uuid', Ember.generateGuid());
+    const uuid = this.set('uuid', guidFor({}));
     await render(hbs`
       <div style="width: 362px; font: 16px sans-serif;">
         {{truncate-multiline id=uuid truncate=myTruncate text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}

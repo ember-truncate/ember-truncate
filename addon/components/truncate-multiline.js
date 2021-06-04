@@ -1,3 +1,4 @@
+import { readOnly, not } from '@ember/object/computed';
 import { set } from '@ember/object';
 import Component from '@ember/component';
 import { computed } from '@ember/object';
@@ -97,7 +98,7 @@ export default Component.extend(ResizeHandlerMixin, {
    * @type {boolean}
    * @readonly
    */
-  isTruncated: computed.readOnly('_truncate'),
+  isTruncated: readOnly('_truncate'),
 
   /**
    * Whether the text needed truncating or was short enough already.
@@ -105,7 +106,7 @@ export default Component.extend(ResizeHandlerMixin, {
    * @type {boolean}
    * @readonly
    */
-  neededTruncating: computed.readOnly('_neededTruncating'),
+  neededTruncating: readOnly('_neededTruncating'),
 
   /**
    * Internal state of whether or not the text needed truncating.
@@ -134,7 +135,7 @@ export default Component.extend(ResizeHandlerMixin, {
    * @type {boolean}
    * @private
    */
-  _buttonInPlace: computed.not('_buttonDestination'),
+  _buttonInPlace: not('_buttonDestination'),
 
   /**
    * Resets the component when the `text` attribute of the component has changed
