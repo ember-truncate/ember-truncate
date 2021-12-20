@@ -1,14 +1,14 @@
 {{#if (has-block)}}
-  {{#if _truncate}}
+  {{#if this._truncate}}
     {{yield
       (hash
         target=(component "ember-truncate/truncation-target")
         button=(component "ember-truncate/button-toggle"
-          _destination=_buttonDestination
-          _inPlace=_buttonInPlace
+          _destination=this._buttonDestination
+          _inPlace=this._buttonInPlace
           onClick=(action "toggleTruncate"))
-        isTruncated=isTruncated
-        neededTruncating=neededTruncating
+        isTruncated=this.isTruncated
+        neededTruncating=this.neededTruncating
       )
     }}
   {{else}}
@@ -16,31 +16,31 @@
       (hash
         target=(component "ember-truncate/truncation-noop")
         button=(component "ember-truncate/button-toggle"
-          _destination=_buttonDestination
-          _inPlace=_buttonInPlace
+          _destination=this._buttonDestination
+          _inPlace=this._buttonInPlace
           onClick=(action "toggleTruncate"))
-        isTruncated=isTruncated
-        neededTruncating=neededTruncating
+        isTruncated=this.isTruncated
+        neededTruncating=this.neededTruncating
       )
     }}
   {{/if}}
 {{else}}
-  {{#if _truncate}}
+  {{#if this._truncate}}
     <EmberTruncate::TruncationTarget>
-      {{text}}
+      {{this.text}}
     </EmberTruncate::TruncationTarget>
     {{! only show the "see more" button if the text has been truncated }}
-    {{#if neededTruncating}}
-      <EmberTruncate::ButtonToggle @_destination={{_buttonDestination}} @_inPlace={{_buttonInPlace}} @onClick={{action "toggleTruncate"}}>
-        {{seeMoreText}}
+    {{#if this.neededTruncating}}
+      <EmberTruncate::ButtonToggle @_destination={{this._buttonDestination}} @_inPlace={{this._buttonInPlace}} @onClick={{action "toggleTruncate"}}>
+        {{this.seeMoreText}}
       </EmberTruncate::ButtonToggle>
     {{/if}}
   {{else}}
-    {{text}}
+    {{this.text}}
     {{! only show the "see less" button if the text has been truncated }}
-    {{#if neededTruncating}}
+    {{#if this.neededTruncating}}
       <EmberTruncate::ButtonToggle @_inPlace={{true}} @onClick={{action "toggleTruncate"}}>
-        {{seeLessText}}
+        {{this.seeLessText}}
       </EmberTruncate::ButtonToggle>
     {{/if}}
   {{/if}}
