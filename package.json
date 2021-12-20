@@ -39,17 +39,17 @@
   },
   "devDependencies": {
     "@ember/optional-features": "^2.0.0",
-    "@ember/test-helpers": "^2.2.5",
+    "@ember/test-helpers": "^2.6.0",
     "@embroider/test-setup": "^0.37.0",
     "@glimmer/component": "^1.0.4",
     "@glimmer/tracking": "^1.0.4",
     "babel-eslint": "^10.1.0",
     "broccoli-asset-rev": "^3.0.0",
     "ember-ajax": "^5.0.0",
-    "ember-auto-import": "^1.11.2",
+    "ember-auto-import": "^2.2.4",
     "ember-cli": "~3.26.1",
     "ember-cli-dependency-checker": "^3.2.0",
-    "ember-cli-deprecation-workflow": "^1.0.1",
+    "ember-cli-deprecation-workflow": "^2.1.0",
     "ember-cli-inject-live-reload": "^2.0.2",
     "ember-cli-sri": "^2.1.1",
     "ember-cli-terser": "^4.0.1",
@@ -76,7 +76,8 @@
     "qunit": "^2.14.1",
     "qunit-dom": "^1.6.0",
     "release-it": "^14.2.1",
-    "release-it-lerna-changelog": "^3.1.0"
+    "release-it-lerna-changelog": "^3.1.0",
+    "webpack": "^5.65.0"
   },
   "engines": {
     "node": ">= 12"
