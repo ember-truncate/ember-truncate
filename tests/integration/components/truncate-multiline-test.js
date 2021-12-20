@@ -215,7 +215,7 @@ module('Integration | Component | truncate-multiline', function (hooks) {
     const uuid = this.set('uuid', guidFor({}));
     await render(hbs`
       <div style="width: 362px; font: 16px sans-serif;">
-        {{truncate-multiline id=uuid text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
+        {{truncate-multiline id=this.uuid text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
       </div>
     `);
 
@@ -246,7 +246,7 @@ module('Integration | Component | truncate-multiline', function (hooks) {
     const uuid = this.set('uuid', guidFor({}));
     await render(hbs`
       <div style="width: 362px; font: 16px sans-serif;">
-        {{#truncate-multiline id=uuid as |tm|}}
+        {{#truncate-multiline id=this.uuid as |tm|}}
           {{#tm.target}}
             supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious
           {{/tm.target}}
@@ -287,7 +287,7 @@ module('Integration | Component | truncate-multiline', function (hooks) {
     const uuid = this.set('uuid', guidFor({}));
     await render(hbs`
       <div style="width: 362px; font: 16px sans-serif;">
-        {{truncate-multiline id=uuid truncate=myTruncate text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
+        {{truncate-multiline id=this.uuid truncate=this.myTruncate text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"}}
       </div>
     `);
 
@@ -397,7 +397,7 @@ module('Integration | Component | truncate-multiline', function (hooks) {
 
     await render(hbs`
       <div style="width: 362px; font: 16px sans-serif;">
-        {{truncate-multiline text=textToTruncate}}
+        {{truncate-multiline text=this.textToTruncate}}
       </div>
     `);
 
@@ -432,7 +432,7 @@ module('Integration | Component | truncate-multiline', function (hooks) {
       <div style="width: 362px; font: 16px sans-serif;">
         {{truncate-multiline
           text="supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious supercalifragilisticexpialidocious"
-          lines=lineToTruncate
+          lines=this.lineToTruncate
         }}
       </div>
     `);
@@ -468,8 +468,8 @@ module('Integration | Component | truncate-multiline', function (hooks) {
     await render(hbs`
       <div style="width: 362px; font: 16px sans-serif;">
         {{truncate-multiline
-          text=text
-          lines=lineToTruncate
+          text=this.text
+          lines=this.lineToTruncate
         }}
       </div>
     `);
@@ -494,10 +494,10 @@ module('Integration | Component | truncate-multiline', function (hooks) {
 
     await render(hbs`
       {{truncate-multiline
-        text=text
-        seeMoreText=seeMoreText
-        seeLessText=seeLessText
-        lines=lineToTruncate
+        text=this.text
+        seeMoreText=this.seeMoreText
+        seeLessText=this.seeLessText
+        lines=this.lineToTruncate
       }}
     `);
 
