@@ -1,7 +1,7 @@
 <EmberWormhole @destinationElement={{this._destination}} @renderInPlace={{this._inPlace}}>
   <button
     class="truncate-multiline--button {{this.classNames}}"
-    onclick={{action this.DOMClick}}
+    onclick={{this.DOMClick}}
     type="button"
   >
     {{yield}}

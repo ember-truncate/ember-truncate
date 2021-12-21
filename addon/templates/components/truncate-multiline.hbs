@@ -6,7 +6,7 @@
         button=(component "ember-truncate/button-toggle"
           _destination=this._buttonDestination
           _inPlace=this._buttonInPlace
-          onClick=(action "toggleTruncate"))
+          onClick=this._toggleTruncate)
         isTruncated=this.isTruncated
         neededTruncating=this.neededTruncating
       )
@@ -18,7 +18,7 @@
         button=(component "ember-truncate/button-toggle"
           _destination=this._buttonDestination
           _inPlace=this._buttonInPlace
-          onClick=(action "toggleTruncate"))
+          onClick=this._toggleTruncate)
         isTruncated=this.isTruncated
         neededTruncating=this.neededTruncating
       )
@@ -31,7 +31,7 @@
     </EmberTruncate::TruncationTarget>
     {{! only show the "see more" button if the text has been truncated }}
     {{#if this.neededTruncating}}
-      <EmberTruncate::ButtonToggle @_destination={{this._buttonDestination}} @_inPlace={{this._buttonInPlace}} @onClick={{action "toggleTruncate"}}>
+      <EmberTruncate::ButtonToggle @_destination={{this._buttonDestination}} @_inPlace={{this._buttonInPlace}} @onClick={{this._toggleTruncate}}>
         {{this.seeMoreText}}
       </EmberTruncate::ButtonToggle>
     {{/if}}
@@ -39,7 +39,7 @@
     {{this.text}}
     {{! only show the "see less" button if the text has been truncated }}
     {{#if this.neededTruncating}}
-      <EmberTruncate::ButtonToggle @_inPlace={{true}} @onClick={{action "toggleTruncate"}}>
+      <EmberTruncate::ButtonToggle @_inPlace={{true}} @onClick={{this._toggleTruncate}}>
         {{this.seeLessText}}
       </EmberTruncate::ButtonToggle>
     {{/if}}
