@@ -1,5 +1,5 @@
 import { readOnly, not } from '@ember/object/computed';
-import { set } from '@ember/object';
+import { set, action } from '@ember/object';
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import ResizeHandlerMixin from 'ember-singularity-mixins/mixins/resize-handler';
@@ -244,34 +244,32 @@ export default Component.extend(ResizeHandlerMixin, {
    */
   resizeOnInsert: false,
 
-  actions: {
-    /**
-     * Called by the "see more/see less" button. Toggles truncation.
-     * @return {Void}
-     */
-    toggleTruncate() {
-      let wasTruncated = this._truncate;
-      this.toggleProperty('_truncate');
+  /**
+   * Called by the "see more/see less" button. Toggles truncation.
+   * @return {Void}
+   */
+  _toggleTruncate: action(function () {
+    let wasTruncated = this._truncate;
+    this.toggleProperty('_truncate');
 
-      if (wasTruncated) {
-        const onExpand = this.onExpand;
-        if (typeof onExpand === 'function') {
-          onExpand();
-        }
-      } else {
-        // Need to reset state when the text is retruncated via the 'See Less' button
-        this._resetState();
-
-        const onCollapse = this.onCollapse;
-        if (typeof onCollapse === 'function') {
-          onCollapse();
-        }
+    if (wasTruncated) {
+      const onExpand = this.onExpand;
+      if (typeof onExpand === 'function') {
+        onExpand();
       }
+    } else {
+      // Need to reset state when the text is retruncated via the 'See Less' button
+      this._resetState();
 
-      const onToggle = this.onToggle;
-      if (typeof onToggle === 'function') {
-        onToggle(!wasTruncated);
+      const onCollapse = this.onCollapse;
+      if (typeof onCollapse === 'function') {
+        onCollapse();
       }
-    },
-  },
+    }
+
+    const onToggle = this.onToggle;
+    if (typeof onToggle === 'function') {
+      onToggle(!wasTruncated);
+    }
+  }),
 });
