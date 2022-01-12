@@ -1,3 +1,13 @@
+
+## v3.0.1 (2022-01-12)
+
+#### :rocket: Enhancement
+* [#474](https://github.com/ember-truncate/ember-truncate/pull/474) Ember 4 Support ([@dfreeman](https://github.com/dfreeman))
+
+#### Committers: 1
+- Dan Freeman ([@dfreeman](https://github.com/dfreeman))
+
+
 ## v3.0.0 (2021-06-04)
 
 #### :boom: Breaking Change
